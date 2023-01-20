@@ -29,9 +29,9 @@ export class EventsController {
     return this.service.createEvent(event);
   }
 
-  @Put()
-  update(@Body() event: Event) {
-    return this.service.updateEvent(event);
+  @Put(':id')
+  update(@Param('id') id: number, @Body() event: Partial<Event>) {
+    return this.service.updateEvent(id, event);
   }
 
   @Delete(':id')
