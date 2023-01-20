@@ -1,0 +1,56 @@
+version: '3.9'
+services:
+  mysql-adminer:
+    image: adminer
+    container_name: mysql-adminer
+    restart: unless-stopped
+    ports:
+      - 8000:8080
+    networks:
+      - mb-labs-challenge
+
+  mysql-workbench:
+    image: lscr.io/linuxserver/mysql-workbench:latest
+    container_name: mysql-workbench
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Sao_Paulo
+    volumes:
+      - ./workbench:/config
+    ports:
+      - 8001:3000
+    cap_add:
+      - IPC_LOCK
+    restart: unless-stopped
+    networks:
+      - mb-labs-challenge
+
+  mysql-db:
+    image: mysql
+    container_name: mysql-db
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_USER: 'admin'
+      MYSQL_PASSWORD: 'admin'
+      MYSQL_DATABASE: 'MBLABS'
+    ports:
+      - 3306:3306
+    volumes:
+      - ./database:/var/lib/mysql
+    restart: unless-stopped
+    networks:
+      - mb-labs-challenge
+
+  api:
+    image: challenge-api
+    container_name: api
+    build: .
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+    networks:
+      - mb-labs-challenge
+
+networks:
+  mb-labs-challenge:
