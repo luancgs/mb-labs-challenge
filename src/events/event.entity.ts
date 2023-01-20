@@ -33,9 +33,9 @@ export class Event {
   @Column('decimal', { precision: 6, scale: 2 })
   price: number;
 
-  @OneToOne(() => Admin)
+  @OneToOne(() => Admin, { eager: true })
   @JoinColumn()
-  createdBy: Admin;
+  admin: Admin;
 
   @Column('timestamp')
   createdAt: Date;
