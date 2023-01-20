@@ -10,23 +10,15 @@ export class EventsService {
   ) {}
 
   async getEvents(): Promise<Event[]> {
-    return await this.eventsRepository.find();
+    return await this.eventsRepository.find({
+      loadRelationIds: true,
+    });
   }
 
   async getEvent(_id: number): Promise<Event[]> {
     return await this.eventsRepository.find({
-      select: [
-        'title',
-        'address',
-        'date',
-        'contactEmail',
-        'contactPhone',
-        'availableTickets',
-        'price',
-        'createdBy',
-        'createdAt',
-      ],
       where: [{ id: _id }],
+      loadRelationIds: true,
     });
   }
 
