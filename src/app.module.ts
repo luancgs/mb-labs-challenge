@@ -6,12 +6,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { join } from 'path';
 import { EventsModule } from './events/events.module';
 import { AdminsModule } from './admins/admins.module';
+import { TicketsModule } from './tickets/tickets.module';
+import { DiscountsModule } from './discounts/discounts.module';
+import { CartsModule } from './carts/carts.module';
 
 @Module({
   imports: [
     TypeOrmModule.forRoot({
       type: 'mysql',
-      host: 'mysql-db',
+      host: 'localhost',
       port: 3306,
       username: 'admin',
       password: 'admin',
@@ -22,6 +25,9 @@ import { AdminsModule } from './admins/admins.module';
     UsersModule,
     EventsModule,
     AdminsModule,
+    TicketsModule,
+    DiscountsModule,
+    CartsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
