@@ -45,8 +45,6 @@ export class AdminsService {
     try {
       await this.adminsRepository.update(id, admin);
     } catch (error) {
-      console.log(error instanceof QueryFailedError);
-      console.log(error);
       if (error instanceof QueryFailedError) {
         throw new AdminUpdateError(error.message);
       } else {
