@@ -5,6 +5,7 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
+import { Organizer } from 'src/organizers/organizer.entity';
 import { Admin } from '../admins/admin.entity';
 
 @Entity()
@@ -33,10 +34,14 @@ export class Event {
   @Column('decimal', { precision: 6, scale: 2 })
   price: number;
 
+  @Column('timestamp')
+  createdAt: Date;
+
+  @OneToOne(() => Organizer, { eager: true })
+  @JoinColumn()
+  organizer: Organizer;
+
   @OneToOne(() => Admin, { eager: true })
   @JoinColumn()
   admin: Admin;
-
-  @Column('timestamp')
-  createdAt: Date;
 }
