@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QueryFailedError, Repository } from 'typeorm';
+import {
+  EntityPropertyNotFoundError,
+  QueryFailedError,
+  Repository,
+} from 'typeorm';
 import { UserCreateError } from './errors/user.create.error';
 import { UserUpdateError } from './errors/user.update.error';
 import { User } from './user.entity';
@@ -45,7 +49,11 @@ export class UsersService {
     try {
       await this.usersRepository.update(id, user);
     } catch (error) {
-      if (error instanceof QueryFailedError) {
+      console.log(error);
+      if (
+        error instanceof QueryFailedError ||
+        error instanceof EntityPropertyNotFoundError
+      ) {
         throw new UserUpdateError(error.message);
       } else {
         throw error;
