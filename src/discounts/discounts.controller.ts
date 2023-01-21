@@ -6,36 +6,93 @@ import {
   Put,
   Delete,
   Param,
+  HttpException,
+  HttpStatus,
+  Query,
 } from '@nestjs/common';
 import { Discount } from './discount.entity';
 import { DiscountsService } from './discounts.service';
+import { DiscountCreateError } from './errors/discount.create.error';
+import { DiscountUpdateError } from './errors/discount.update.error';
 
 @Controller('discounts')
 export class DiscountsController {
   constructor(private service: DiscountsService) {}
 
   @Get()
-  getAll() {
-    return this.service.getDiscounts();
+  async getAll(@Query('code') code?: string) {
+    try {
+      return await this.service.getDiscounts(code);
+    } catch (error) {
+      throw new HttpException(
+        `Error: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @Get(':id')
-  getById(@Param('id') id: number) {
-    return this.service.getDiscountById(id);
+  async getById(@Param('id') id: number) {
+    try {
+      return await this.service.getDiscountById(id);
+    } catch (error) {
+      throw new HttpException(
+        `Error: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   @Post()
-  create(@Body() discount: Discount) {
-    return this.service.createDiscount(discount);
+  async create(@Body() discount: Discount) {
+    try {
+      await this.service.createDiscount(discount);
+      return 'discount created successfully';
+    } catch (error) {
+      if (error instanceof DiscountCreateError) {
+        throw new HttpException(
+          `Bad Request: ${error.message}`,
+          HttpStatus.BAD_REQUEST,
+        );
+      } else {
+        throw new HttpException(
+          `Error: ${error.message}`,
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+    }
   }
 
   @Put(':id')
-  update(@Param('id') id: number, @Body() discount: Partial<Discount>) {
-    return this.service.updateDiscount(id, discount);
+  async update(@Param('id') id: number, @Body() discount: Partial<Discount>) {
+    try {
+      await this.service.updateDiscount(id, discount);
+      return 'discount updated successfully';
+    } catch (error) {
+      if (error instanceof DiscountUpdateError) {
+        throw new HttpException(
+          `Bad Request: ${error.message}`,
+          HttpStatus.BAD_REQUEST,
+        );
+      } else {
+        throw new HttpException(
+          `Error: ${error.message}`,
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+    }
   }
 
   @Delete(':id')
-  delete(@Param('id') id: number) {
-    return this.service.deleteDiscount(id);
+  async delete(@Param('id') id: number) {
+    try {
+      await this.service.deleteDiscount(id);
+      return 'discount deleted successfully';
+    } catch (error) {
+      throw new HttpException(
+        `Error: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }
