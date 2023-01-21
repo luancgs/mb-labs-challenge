@@ -10,9 +10,7 @@ export class EventsService {
   ) {}
 
   async getEvents(): Promise<Event[]> {
-    return await this.eventsRepository.find({
-      loadRelationIds: true,
-    });
+    return await this.eventsRepository.find({ loadRelationIds: true });
   }
 
   async getEvent(_id: number): Promise<Event[]> {
