@@ -71,7 +71,7 @@ export class DiscountsService {
 
   async deleteDiscount(id: number) {
     try {
-      return await this.discountsRepository.delete(id);
+      await this.discountsRepository.delete(id);
     } catch (error) {
       throw error;
     }
