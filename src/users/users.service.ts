@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { QueryFailedError, Repository } from 'typeorm';
+import { UserCreateError } from './errors/user.create.error';
+import { UserUpdateError } from './errors/user.update.error';
 import { User } from './user.entity';
 
 @Injectable()
@@ -10,24 +12,52 @@ export class UsersService {
   ) {}
 
   async getUsers(): Promise<User[]> {
-    return await this.usersRepository.find();
+    try {
+      return await this.usersRepository.find();
+    } catch (error) {
+      throw error;
+    }
   }
 
   async getUser(_id: number): Promise<User[]> {
-    return await this.usersRepository.find({
-      where: [{ id: _id }],
-    });
+    try {
+      return await this.usersRepository.find({
+        where: [{ id: _id }],
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 
   async createUser(user: User) {
-    this.usersRepository.insert(user);
+    try {
+      await this.usersRepository.insert(user);
+    } catch (error) {
+      if (error instanceof QueryFailedError) {
+        throw new UserCreateError(error.message);
+      } else {
+        throw error;
+      }
+    }
   }
 
   async updateUser(id: number, user: Partial<User>) {
-    this.usersRepository.update(id, user);
+    try {
+      await this.usersRepository.update(id, user);
+    } catch (error) {
+      if (error instanceof QueryFailedError) {
+        throw new UserUpdateError(error.message);
+      } else {
+        throw error;
+      }
+    }
   }
 
   async deleteUser(id: number) {
-    this.usersRepository.delete(id);
+    try {
+      return await this.usersRepository.delete(id);
+    } catch (error) {
+      throw error;
+    }
   }
 }
