@@ -19,11 +19,23 @@ export class AdminsService {
     }
   }
 
-  async getAdmin(_id: number): Promise<Admin[]> {
+  async getAdminById(_id: number): Promise<Admin[]> {
     try {
       return await this.adminsRepository.find({
         where: [{ id: _id }],
       });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getAdminByEmail(_email: string): Promise<Admin> {
+    try {
+      return await this.adminsRepository
+        .createQueryBuilder('admin')
+        .where('admin.email = :email', { email: _email })
+        .addSelect('admin.password')
+        .getOne();
     } catch (error) {
       throw error;
     }
