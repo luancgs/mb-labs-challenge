@@ -2,11 +2,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
   EntityPropertyNotFoundError,
-  FindManyOptions,
   QueryFailedError,
   Repository,
 } from 'typeorm';
 import { Discount } from './discount.entity';
+import { DiscountGetDto } from './DTOs/discount.get.dto';
 import { DiscountCreateError } from './errors/discount.create.error';
 import { DiscountDeleteError } from './errors/discount.delete.error';
 import { DiscountUpdateError } from './errors/discount.update.error';
@@ -18,26 +18,56 @@ export class DiscountsService {
     private discountsRepository: Repository<Discount>,
   ) {}
 
-  async getDiscounts(_code: string): Promise<Discount[]> {
+  async getDiscounts(_code: string): Promise<DiscountGetDto[]> {
     try {
-      let queryOptions: FindManyOptions;
-      if (_code === undefined) {
-        queryOptions = { loadRelationIds: true };
+      let discounts: Discount[];
+
+      if (_code !== undefined) {
+        discounts = await this.discountsRepository.find({
+          where: { code: _code },
+        });
       } else {
-        queryOptions = { where: [{ code: _code }], loadRelationIds: true };
+        discounts = await this.discountsRepository.find();
       }
-      return await this.discountsRepository.find(queryOptions);
+
+      const output: DiscountGetDto[] = [];
+      for (const discount of discounts) {
+        output.push(new DiscountGetDto(discount));
+      }
+
+      return output;
     } catch (error) {
       throw error;
     }
   }
 
-  async getDiscountById(_id: number): Promise<Discount[]> {
+  async getDiscountById(_id: number): Promise<DiscountGetDto> {
     try {
-      return await this.discountsRepository.find({
-        where: [{ id: _id }],
-        loadRelationIds: true,
+      const discount = await this.discountsRepository.findOne({
+        where: { id: _id },
       });
+      if (discount) {
+        return new DiscountGetDto(discount);
+      } else {
+        return null;
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getDiscountByEvent(_id: number): Promise<DiscountGetDto[]> {
+    try {
+      const discounts = await this.discountsRepository.find({
+        where: { event: { id: _id } },
+      });
+
+      const output: DiscountGetDto[] = [];
+      for (const discount of discounts) {
+        output.push(new DiscountGetDto(discount));
+      }
+
+      return output;
     } catch (error) {
       throw error;
     }
