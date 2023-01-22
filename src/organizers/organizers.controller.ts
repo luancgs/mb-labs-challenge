@@ -15,6 +15,7 @@ import { Organizer } from './organizer.entity';
 import { OrganizersService } from './organizers.service';
 import { OrganizerCreateError } from './errors/organizer.create.error';
 import { OrganizerUpdateError } from './errors/organizer.update.error';
+import { OrganizerDeleteError } from './errors/organizer.delete.error';
 import { AdminJwtAuthGuard } from '../auth/admin/admin.jwt.auth.guard';
 import { JwtAuthGuard } from '../auth/jwt.auth.guard';
 
@@ -97,10 +98,17 @@ export class OrganizersController {
       await this.service.deleteOrganizer(id);
       return 'organizer deleted successfully';
     } catch (error) {
-      throw new HttpException(
-        `Error: ${error.message}`,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      if (error instanceof OrganizerDeleteError) {
+        throw new HttpException(
+          `Failed Request: ${error.message}`,
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
+      } else {
+        throw new HttpException(
+          `Error: ${error.message}`,
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
   }
 }

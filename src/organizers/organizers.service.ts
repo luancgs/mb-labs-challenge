@@ -4,6 +4,7 @@ import { FindManyOptions, Like, QueryFailedError, Repository } from 'typeorm';
 import { Organizer } from './organizer.entity';
 import { OrganizerCreateError } from './errors/organizer.create.error';
 import { OrganizerUpdateError } from './errors/organizer.update.error';
+import { OrganizerDeleteError } from './errors/organizer.delete.error';
 
 @Injectable()
 export class OrganizersService {
@@ -66,7 +67,10 @@ export class OrganizersService {
 
   async deleteOrganizer(id: number) {
     try {
-      return await this.organizersRepository.delete(id);
+      const deleteResult = await this.organizersRepository.delete(id);
+      if (deleteResult.affected === 0) {
+        throw new OrganizerDeleteError('organizer id not found');
+      }
     } catch (error) {
       throw error;
     }
