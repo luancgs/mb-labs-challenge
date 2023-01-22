@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { Discount } from './discount.entity';
 import { DiscountCreateError } from './errors/discount.create.error';
+import { DiscountDeleteError } from './errors/discount.delete.error';
 import { DiscountUpdateError } from './errors/discount.update.error';
 
 @Injectable()
@@ -71,7 +72,10 @@ export class DiscountsService {
 
   async deleteDiscount(id: number) {
     try {
-      await this.discountsRepository.delete(id);
+      const deleteResult = await this.discountsRepository.delete(id);
+      if (deleteResult.affected === 0) {
+        throw new DiscountDeleteError('discount id not found');
+      }
     } catch (error) {
       throw error;
     }

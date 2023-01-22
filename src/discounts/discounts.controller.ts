@@ -16,6 +16,7 @@ import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
 import { Discount } from './discount.entity';
 import { DiscountsService } from './discounts.service';
 import { DiscountCreateError } from './errors/discount.create.error';
+import { DiscountDeleteError } from './errors/discount.delete.error';
 import { DiscountUpdateError } from './errors/discount.update.error';
 
 @Controller('discounts')
@@ -97,10 +98,17 @@ export class DiscountsController {
       await this.service.deleteDiscount(id);
       return 'discount deleted successfully';
     } catch (error) {
-      throw new HttpException(
-        `Error: ${error.message}`,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      if (error instanceof DiscountDeleteError) {
+        throw new HttpException(
+          `Failed Request: ${error.message}`,
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
+      } else {
+        throw new HttpException(
+          `Error: ${error.message}`,
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
   }
 }
