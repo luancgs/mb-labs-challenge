@@ -13,6 +13,7 @@ import {
 import { AdminJwtAuthGuard } from '../auth/admin/admin.jwt.auth.guard';
 import { JwtAuthGuard } from '../auth/jwt.auth.guard';
 import { TicketCreateError } from './errors/ticket.create.error';
+import { TicketDeleteError } from './errors/ticket.delete.error';
 import { TicketUpdateError } from './errors/ticket.update.error';
 import { Ticket } from './ticket.entity';
 import { TicketsService } from './tickets.service';
@@ -96,10 +97,17 @@ export class TicketsController {
       await this.service.deleteTicket(id);
       return 'ticket deleted successfully';
     } catch (error) {
-      throw new HttpException(
-        `Error: ${error.message}`,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      if (error instanceof TicketDeleteError) {
+        throw new HttpException(
+          `Failed Request: ${error.message}`,
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
+      } else {
+        throw new HttpException(
+          `Error: ${error.message}`,
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
   }
 }

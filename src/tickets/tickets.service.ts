@@ -6,6 +6,7 @@ import {
   Repository,
 } from 'typeorm';
 import { TicketCreateError } from './errors/ticket.create.error';
+import { TicketDeleteError } from './errors/ticket.delete.error';
 import { TicketUpdateError } from './errors/ticket.update.error';
 import { Ticket } from './ticket.entity';
 
@@ -64,7 +65,10 @@ export class TicketsService {
 
   async deleteTicket(id: number) {
     try {
-      await this.ticketsRepository.delete(id);
+      const deleteResult = await this.ticketsRepository.delete(id);
+      if (deleteResult.affected === 0) {
+        throw new TicketDeleteError('ticket id not found');
+      }
     } catch (error) {
       throw error;
     }
