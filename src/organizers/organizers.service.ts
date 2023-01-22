@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindManyOptions, Like, QueryFailedError, Repository } from 'typeorm';
+import { Like, QueryFailedError, Repository } from 'typeorm';
 import { Organizer } from './organizer.entity';
 import { OrganizerCreateError } from './errors/organizer.create.error';
 import { OrganizerUpdateError } from './errors/organizer.update.error';
 import { OrganizerDeleteError } from './errors/organizer.delete.error';
+import { OrganizerGetDto } from './DTOs/organizer.get.dto';
 
 @Injectable()
 export class OrganizersService {
@@ -13,29 +14,40 @@ export class OrganizersService {
     private organizersRepository: Repository<Organizer>,
   ) {}
 
-  async getOrganizers(_name: string): Promise<Organizer[]> {
+  async getOrganizers(_name: string): Promise<OrganizerGetDto[]> {
     try {
-      let queryOptions: FindManyOptions;
-      if (_name === undefined) {
-        queryOptions = { loadRelationIds: true };
+      let organizers: Organizer[];
+
+      if (_name !== undefined) {
+        organizers = await this.organizersRepository.find({
+          where: { name: Like(`%${_name}%`) },
+        });
       } else {
-        queryOptions = {
-          where: [{ name: Like(`%${_name}%`) }],
-          loadRelationIds: true,
-        };
+        organizers = await this.organizersRepository.find();
       }
-      return await this.organizersRepository.find(queryOptions);
+
+      const output: OrganizerGetDto[] = [];
+      for (const organizer of organizers) {
+        output.push(new OrganizerGetDto(organizer));
+      }
+
+      return output;
     } catch (error) {
       throw error;
     }
   }
 
-  async getOrganizer(_id: number): Promise<Organizer[]> {
+  async getOrganizer(_id: number): Promise<OrganizerGetDto> {
     try {
-      return await this.organizersRepository.find({
-        where: [{ id: _id }],
-        loadRelationIds: true,
+      const organizer = await this.organizersRepository.findOne({
+        where: { id: _id },
       });
+
+      if (organizer) {
+        return new OrganizerGetDto(organizer);
+      } else {
+        return null;
+      }
     } catch (error) {
       throw error;
     }
