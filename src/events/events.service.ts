@@ -11,6 +11,7 @@ import {
   Repository,
 } from 'typeorm';
 import { EventCreateError } from './errors/event.create.error';
+import { EventDeleteError } from './errors/event.delete.error';
 import { EventUpdateError } from './errors/event.update.error';
 import { Event } from './event.entity';
 
@@ -79,7 +80,10 @@ export class EventsService {
 
   async deleteEvent(id: number) {
     try {
-      await this.eventsRepository.delete(id);
+      const deleteResult = await this.eventsRepository.delete(id);
+      if (deleteResult.affected === 0) {
+        throw new EventDeleteError('event id not found');
+      }
     } catch (error) {
       throw error;
     }

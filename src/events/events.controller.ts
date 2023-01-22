@@ -14,6 +14,7 @@ import {
 import { AdminJwtAuthGuard } from 'src/auth/admin/admin.jwt.auth.guard';
 import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
 import { EventCreateError } from './errors/event.create.error';
+import { EventDeleteError } from './errors/event.delete.error';
 import { EventUpdateError } from './errors/event.update.error';
 import { Event } from './event.entity';
 import { EventsService } from './events.service';
@@ -107,10 +108,17 @@ export class EventsController {
       await this.service.deleteEvent(id);
       return 'event deleted successfully';
     } catch (error) {
-      throw new HttpException(
-        `Error: ${error.message}`,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      if (error instanceof EventDeleteError) {
+        throw new HttpException(
+          `Failed Request: ${error.message}`,
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
+      } else {
+        throw new HttpException(
+          `Error: ${error.message}`,
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
   }
 }
