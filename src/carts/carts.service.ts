@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm';
 import { Cart } from './cart.entity';
-import { CartCreateError } from './errors/cart.create.error';
+import { CartGetDto } from './DTOs/cart.get.dto';
 import { CartDeleteError } from './errors/cart.delete.error';
 import { CartUpdateError } from './errors/cart.update.error';
 
@@ -13,40 +13,27 @@ export class CartsService {
     private cartsRepository: Repository<Cart>,
   ) {}
 
-  async getCarts(): Promise<Cart[]> {
+  async getCartByUserId(_id: number): Promise<CartGetDto[]> {
     try {
-      return await this.cartsRepository.find({ loadRelationIds: true });
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async getCartByUserId(_id: number): Promise<Cart[]> {
-    try {
-      return await this.cartsRepository.find({
-        where: [{ user: { id: _id } }],
-        loadRelationIds: true,
+      const carts = await this.cartsRepository.find({
+        where: { user: { id: _id } },
       });
+
+      const output: CartGetDto[] = [];
+      for (const cart of carts) {
+        output.push(new CartGetDto(cart));
+      }
+      console.log(output);
+      return output;
     } catch (error) {
       throw error;
     }
   }
 
-  async createCart(cart: Cart) {
+  async updateCartById(_id: number, cart: Partial<Cart>) {
     try {
-      await this.cartsRepository.insert(cart);
-    } catch (error) {
-      if (error instanceof QueryFailedError) {
-        throw new CartCreateError(error.message);
-      } else {
-        throw error;
-      }
-    }
-  }
-
-  async updateCart(id: number, cart: Partial<Cart>) {
-    try {
-      await this.cartsRepository.update(id, cart);
+      cart.id = _id;
+      await this.cartsRepository.save(cart);
     } catch (error) {
       if (error instanceof QueryFailedError) {
         throw new CartUpdateError(error.message);
@@ -56,14 +43,13 @@ export class CartsService {
     }
   }
 
-  async deleteCart(id: number) {
+  async deleteCartByUserId(_id: number) {
     try {
-      const deleteResult = await this.cartsRepository.delete(id);
-      if (deleteResult.affected === 0) {
-        throw new CartDeleteError('cart id not found');
-      }
+      await this.cartsRepository.delete({
+        user: { id: _id },
+      });
     } catch (error) {
-      throw error;
+      throw new CartDeleteError(error.message);
     }
   }
 }
