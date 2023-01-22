@@ -11,7 +11,7 @@ export class AdminAuthService {
   ) {}
 
   async validate(email: string, pass: string): Promise<any> {
-    const admin = await this.adminsService.getAdminByEmail(email);
+    const admin = await this.adminsService.getAdminLogin(email);
 
     if (admin) {
       const passwordMatch = await bcrypt.compare(pass, admin.password);

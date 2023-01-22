@@ -37,7 +37,7 @@ export class AdminsController {
   @Get(':id')
   async get(@Param('id') id: number) {
     try {
-      return await this.service.getAdminById(id);
+      return await this.service.getAdmin(id);
     } catch (error) {
       throw new HttpException(
         `Error: ${error.message}`,

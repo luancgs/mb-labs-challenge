@@ -21,7 +21,7 @@ export class AdminsService {
     }
   }
 
-  async getAdminById(_id: number): Promise<Admin[]> {
+  async getAdmin(_id: number): Promise<Admin[]> {
     try {
       return await this.adminsRepository.find({
         where: [{ id: _id }],
@@ -31,7 +31,7 @@ export class AdminsService {
     }
   }
 
-  async getAdminByEmail(_email: string): Promise<Admin> {
+  async getAdminLogin(_email: string): Promise<Admin> {
     try {
       return await this.adminsRepository
         .createQueryBuilder('admin')
