@@ -7,6 +7,7 @@ import {
 } from 'typeorm';
 import { UserCreateError } from './errors/user.create.error';
 import { UserUpdateError } from './errors/user.update.error';
+import { UserDeleteError } from './errors/user.delete.error';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
 
@@ -81,7 +82,10 @@ export class UsersService {
 
   async deleteUser(id: number) {
     try {
-      return await this.usersRepository.delete(id);
+      const deleteResult = await this.usersRepository.delete(id);
+      if (deleteResult.affected === 0) {
+        throw new UserDeleteError('user id not found');
+      }
     } catch (error) {
       throw error;
     }

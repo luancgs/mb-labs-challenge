@@ -14,6 +14,7 @@ import { UsersService } from './users.service';
 import { User } from './user.entity';
 import { UserCreateError } from './errors/user.create.error';
 import { UserUpdateError } from './errors/user.update.error';
+import { UserDeleteError } from './errors/user.delete.error';
 import { AdminJwtAuthGuard } from '../auth/admin/admin.jwt.auth.guard';
 
 @Controller('users')
@@ -90,10 +91,17 @@ export class UsersController {
       await this.service.deleteUser(id);
       return 'user deleted successfully';
     } catch (error) {
-      throw new HttpException(
-        `Error: ${error.message}`,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      if (error instanceof UserDeleteError) {
+        throw new HttpException(
+          `Failed Request: ${error.message}`,
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
+      } else {
+        throw new HttpException(
+          `Error: ${error.message}`,
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
   }
 }
