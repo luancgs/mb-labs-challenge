@@ -9,7 +9,10 @@ import {
   Query,
   HttpException,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
+import { AdminJwtAuthGuard } from 'src/auth/admin/admin.jwt.auth.guard';
+import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
 import { EventCreateError } from './errors/event.create.error';
 import { EventUpdateError } from './errors/event.update.error';
 import { Event } from './event.entity';
@@ -20,6 +23,7 @@ export class EventsController {
   constructor(private service: EventsService) {}
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   async getAll(
     @Query('title') title?: string,
     @Query('organizer') organizer?: string,
@@ -42,6 +46,7 @@ export class EventsController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   async getById(@Param('id') id: number) {
     try {
       return await this.service.getEventById(id);
@@ -54,6 +59,7 @@ export class EventsController {
   }
 
   @Post()
+  @UseGuards(AdminJwtAuthGuard)
   async create(@Body() event: Event) {
     try {
       await this.service.createEvent(event);
@@ -74,6 +80,7 @@ export class EventsController {
   }
 
   @Put(':id')
+  @UseGuards(AdminJwtAuthGuard)
   async update(@Param('id') id: number, @Body() event: Partial<Event>) {
     try {
       await this.service.updateEvent(id, event);
@@ -94,6 +101,7 @@ export class EventsController {
   }
 
   @Delete(':id')
+  @UseGuards(AdminJwtAuthGuard)
   async delete(@Param('id') id: number) {
     try {
       await this.service.deleteEvent(id);
