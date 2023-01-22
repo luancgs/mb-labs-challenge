@@ -9,7 +9,10 @@ import {
   HttpException,
   HttpStatus,
   Query,
+  UseGuards,
 } from '@nestjs/common';
+import { AdminJwtAuthGuard } from 'src/auth/admin/admin.jwt.auth.guard';
+import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
 import { Discount } from './discount.entity';
 import { DiscountsService } from './discounts.service';
 import { DiscountCreateError } from './errors/discount.create.error';
@@ -20,6 +23,7 @@ export class DiscountsController {
   constructor(private service: DiscountsService) {}
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   async getAll(@Query('code') code?: string) {
     try {
       return await this.service.getDiscounts(code);
@@ -32,6 +36,7 @@ export class DiscountsController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   async getById(@Param('id') id: number) {
     try {
       return await this.service.getDiscountById(id);
@@ -44,6 +49,7 @@ export class DiscountsController {
   }
 
   @Post()
+  @UseGuards(AdminJwtAuthGuard)
   async create(@Body() discount: Discount) {
     try {
       await this.service.createDiscount(discount);
@@ -64,6 +70,7 @@ export class DiscountsController {
   }
 
   @Put(':id')
+  @UseGuards(AdminJwtAuthGuard)
   async update(@Param('id') id: number, @Body() discount: Partial<Discount>) {
     try {
       await this.service.updateDiscount(id, discount);
@@ -84,6 +91,7 @@ export class DiscountsController {
   }
 
   @Delete(':id')
+  @UseGuards(AdminJwtAuthGuard)
   async delete(@Param('id') id: number) {
     try {
       await this.service.deleteDiscount(id);
