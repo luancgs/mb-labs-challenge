@@ -6,11 +6,14 @@ import {
   Put,
   Delete,
   Param,
+  UseGuards,
 } from '@nestjs/common';
+import { AdminJwtAuthGuard } from 'src/auth/admin/admin.jwt.auth.guard';
 import { Cart } from './cart.entity';
 import { CartsService } from './carts.service';
 
 @Controller('carts')
+@UseGuards(AdminJwtAuthGuard)
 export class CartsController {
   constructor(private service: CartsService) {}
 
