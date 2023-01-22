@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { QueryFailedError, Repository } from 'typeorm';
 import { Cart } from './cart.entity';
+import { CartCreateError } from './errors/cart.create.error';
+import { CartDeleteError } from './errors/cart.delete.error';
+import { CartUpdateError } from './errors/cart.update.error';
 
 @Injectable()
 export class CartsService {
@@ -11,25 +14,56 @@ export class CartsService {
   ) {}
 
   async getCarts(): Promise<Cart[]> {
-    return await this.cartsRepository.find({ loadRelationIds: true });
+    try {
+      return await this.cartsRepository.find({ loadRelationIds: true });
+    } catch (error) {
+      throw error;
+    }
   }
 
-  async getCartById(_id: number): Promise<Cart[]> {
-    return await this.cartsRepository.find({
-      where: [{ id: _id }],
-      loadRelationIds: true,
-    });
+  async getCartByUserId(_id: number): Promise<Cart[]> {
+    try {
+      return await this.cartsRepository.find({
+        where: [{ user: { id: _id } }],
+        loadRelationIds: true,
+      });
+    } catch (error) {
+      throw error;
+    }
   }
 
   async createCart(cart: Cart) {
-    this.cartsRepository.insert(cart);
+    try {
+      await this.cartsRepository.insert(cart);
+    } catch (error) {
+      if (error instanceof QueryFailedError) {
+        throw new CartCreateError(error.message);
+      } else {
+        throw error;
+      }
+    }
   }
 
   async updateCart(id: number, cart: Partial<Cart>) {
-    this.cartsRepository.update(id, cart);
+    try {
+      await this.cartsRepository.update(id, cart);
+    } catch (error) {
+      if (error instanceof QueryFailedError) {
+        throw new CartUpdateError(error.message);
+      } else {
+        throw error;
+      }
+    }
   }
 
   async deleteCart(id: number) {
-    this.cartsRepository.delete(id);
+    try {
+      const deleteResult = await this.cartsRepository.delete(id);
+      if (deleteResult.affected === 0) {
+        throw new CartDeleteError('cart id not found');
+      }
+    } catch (error) {
+      throw error;
+    }
   }
 }
