@@ -8,17 +8,21 @@ import {
   Param,
   HttpException,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { Organizer } from './organizer.entity';
 import { OrganizersService } from './organizers.service';
 import { OrganizerCreateError } from './errors/organizer.create.error';
 import { OrganizerUpdateError } from './errors/organizer.update.error';
+import { AdminJwtAuthGuard } from '../auth/admin/admin.jwt.auth.guard';
+import { JwtAuthGuard } from '../auth/jwt.auth.guard';
 
 @Controller('organizers')
 export class OrganizersController {
   constructor(private service: OrganizersService) {}
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   async getAll() {
     try {
       return await this.service.getOrganizers();
@@ -31,6 +35,7 @@ export class OrganizersController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   async get(@Param('id') id: number) {
     try {
       return await this.service.getOrganizer(id);
@@ -43,6 +48,7 @@ export class OrganizersController {
   }
 
   @Post()
+  @UseGuards(AdminJwtAuthGuard)
   async create(@Body() organizer: Organizer) {
     try {
       await this.service.createOrganizer(organizer);
@@ -63,6 +69,7 @@ export class OrganizersController {
   }
 
   @Put(':id')
+  @UseGuards(AdminJwtAuthGuard)
   async update(@Param('id') id: number, @Body() organizer: Partial<Organizer>) {
     try {
       await this.service.updateOrganizer(id, organizer);
@@ -83,6 +90,7 @@ export class OrganizersController {
   }
 
   @Delete(':id')
+  @UseGuards(AdminJwtAuthGuard)
   async delete(@Param('id') id: number) {
     try {
       await this.service.deleteOrganizer(id);
