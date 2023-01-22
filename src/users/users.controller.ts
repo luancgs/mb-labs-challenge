@@ -9,6 +9,7 @@ import {
   HttpException,
   HttpStatus,
   UseGuards,
+  Headers,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
@@ -16,12 +17,14 @@ import { UserCreateError } from './errors/user.create.error';
 import { UserUpdateError } from './errors/user.update.error';
 import { UserDeleteError } from './errors/user.delete.error';
 import { AdminJwtAuthGuard } from '../auth/admin/admin.jwt.auth.guard';
+import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
+import { Cart } from 'src/carts/cart.entity';
 
 @Controller('users')
-@UseGuards(AdminJwtAuthGuard)
 export class UsersController {
   constructor(private service: UsersService) {}
   @Get()
+  @UseGuards(AdminJwtAuthGuard)
   async getAll() {
     try {
       return await this.service.getUsers();
@@ -34,9 +37,10 @@ export class UsersController {
   }
 
   @Get(':id')
+  @UseGuards(JwtAuthGuard)
   async get(@Param('id') id: number) {
     try {
-      return await this.service.getUserById(id);
+      return await this.service.getUser(id);
     } catch (error) {
       throw new HttpException(
         `Error: ${error.message}`,
@@ -46,6 +50,7 @@ export class UsersController {
   }
 
   @Post()
+  @UseGuards(AdminJwtAuthGuard)
   async create(@Body() user: User) {
     try {
       await this.service.createUser(user);
@@ -66,6 +71,7 @@ export class UsersController {
   }
 
   @Put(':id')
+  @UseGuards(JwtAuthGuard)
   async update(@Param('id') id: number, @Body() user: Partial<User>) {
     try {
       await this.service.updateUser(id, user);
@@ -86,6 +92,7 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @UseGuards(JwtAuthGuard)
   async delete(@Param('id') id: number) {
     try {
       await this.service.deleteUser(id);
@@ -102,6 +109,53 @@ export class UsersController {
           HttpStatus.INTERNAL_SERVER_ERROR,
         );
       }
+    }
+  }
+
+  @Get(':id/cart')
+  @UseGuards(JwtAuthGuard)
+  async getUserCart(@Param('id') id: number) {
+    try {
+      return await this.service.getUserCart(id);
+    } catch (error) {
+      throw new HttpException(
+        `Error: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Post(':id/cart')
+  @UseGuards(JwtAuthGuard)
+  async updateUserCart(@Body() cart: Partial<Cart>) {
+    try {
+      return await this.service.updateUserCart(cart);
+    } catch (error) {
+      throw new HttpException(
+        `Error: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Post(':id/buy')
+  @UseGuards(JwtAuthGuard)
+  async buyUserCart(@Param('id') id: number, @Headers() headers) {
+    try {
+      const paymentMethod = headers['payment-method'];
+      if (paymentMethod) {
+        return await this.service.buyCart(id, paymentMethod);
+      } else {
+        throw new HttpException(
+          `Error: invalid payment method`,
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+    } catch (error) {
+      throw new HttpException(
+        `Error: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
     }
   }
 }
