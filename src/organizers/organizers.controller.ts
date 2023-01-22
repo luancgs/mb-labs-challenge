@@ -9,6 +9,7 @@ import {
   HttpException,
   HttpStatus,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { Organizer } from './organizer.entity';
 import { OrganizersService } from './organizers.service';
@@ -23,9 +24,9 @@ export class OrganizersController {
 
   @Get()
   @UseGuards(JwtAuthGuard)
-  async getAll() {
+  async getAll(@Query('name') name?: string) {
     try {
-      return await this.service.getOrganizers();
+      return await this.service.getOrganizers(name);
     } catch (error) {
       throw new HttpException(
         `Error: ${error.message}`,

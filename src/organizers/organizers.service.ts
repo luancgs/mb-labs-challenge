@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { QueryFailedError, Repository } from 'typeorm';
+import { FindManyOptions, Like, QueryFailedError, Repository } from 'typeorm';
 import { Organizer } from './organizer.entity';
 import { OrganizerCreateError } from './errors/organizer.create.error';
 import { OrganizerUpdateError } from './errors/organizer.update.error';
@@ -12,9 +12,18 @@ export class OrganizersService {
     private organizersRepository: Repository<Organizer>,
   ) {}
 
-  async getOrganizers(): Promise<Organizer[]> {
+  async getOrganizers(_name: string): Promise<Organizer[]> {
     try {
-      return await this.organizersRepository.find({ loadRelationIds: true });
+      let queryOptions: FindManyOptions;
+      if (_name === undefined) {
+        queryOptions = { loadRelationIds: true };
+      } else {
+        queryOptions = {
+          where: [{ name: Like(`%${_name}%`) }],
+          loadRelationIds: true,
+        };
+      }
+      return await this.organizersRepository.find(queryOptions);
     } catch (error) {
       throw error;
     }
