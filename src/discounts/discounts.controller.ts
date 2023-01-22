@@ -11,8 +11,8 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { AdminJwtAuthGuard } from 'src/auth/admin/admin.jwt.auth.guard';
-import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
+import { AdminJwtAuthGuard } from '../auth/admin/admin.jwt.auth.guard';
+import { JwtAuthGuard } from '../auth/jwt.auth.guard';
 import { Discount } from './discount.entity';
 import { DiscountsService } from './discounts.service';
 import { DiscountCreateError } from './errors/discount.create.error';

@@ -11,8 +11,8 @@ import {
   HttpStatus,
   UseGuards,
 } from '@nestjs/common';
-import { AdminJwtAuthGuard } from 'src/auth/admin/admin.jwt.auth.guard';
-import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
+import { AdminJwtAuthGuard } from '../auth/admin/admin.jwt.auth.guard';
+import { JwtAuthGuard } from '../auth/jwt.auth.guard';
 import { EventCreateError } from './errors/event.create.error';
 import { EventDeleteError } from './errors/event.delete.error';
 import { EventUpdateError } from './errors/event.update.error';
