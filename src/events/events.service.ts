@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Discount } from 'src/discounts/discount.entity';
+import { DiscountsService } from 'src/discounts/discounts.service';
 
 import {
   EntityPropertyNotFoundError,
@@ -10,6 +12,7 @@ import {
   QueryFailedError,
   Repository,
 } from 'typeorm';
+import { EventGetDto } from './DTOs/event.get.dto';
 import { EventCreateError } from './errors/event.create.error';
 import { EventDeleteError } from './errors/event.delete.error';
 import { EventUpdateError } from './errors/event.update.error';
@@ -19,6 +22,7 @@ import { Event } from './event.entity';
 export class EventsService {
   constructor(
     @InjectRepository(Event) private eventsRepository: Repository<Event>,
+    private discountsService: DiscountsService,
   ) {}
 
   async getEvents(
@@ -26,7 +30,7 @@ export class EventsService {
     organizer: string,
     address: string,
     availableOnly: string,
-  ): Promise<Event[]> {
+  ): Promise<EventGetDto[]> {
     try {
       const queryOptions = this.buildFilterQuery(
         title,
@@ -34,18 +38,30 @@ export class EventsService {
         address,
         availableOnly,
       );
-      return await this.eventsRepository.find(queryOptions);
+
+      const events = await this.eventsRepository.find(queryOptions);
+
+      const output: EventGetDto[] = [];
+      for (const event of events) {
+        output.push(new EventGetDto(event));
+      }
+
+      return output;
     } catch (error) {
       throw error;
     }
   }
 
-  async getEventById(_id: number): Promise<Event[]> {
+  async getEvent(_id: number): Promise<EventGetDto> {
     try {
-      return await this.eventsRepository.find({
-        where: [{ id: _id }],
-        loadRelationIds: true,
+      const event = await this.eventsRepository.findOne({
+        where: { id: _id },
       });
+      if (event) {
+        return new EventGetDto(event);
+      } else {
+        return null;
+      }
     } catch (error) {
       throw error;
     }
@@ -95,9 +111,7 @@ export class EventsService {
     _address: string,
     availableOnly: string,
   ): FindManyOptions {
-    let queryOptions: FindManyOptions = {
-      loadRelationIds: true,
-    };
+    let queryOptions: FindManyOptions = {};
 
     let filter: FindOptionsWhere<Event> = {};
 
@@ -122,5 +136,21 @@ export class EventsService {
     }
 
     return queryOptions;
+  }
+
+  async getEventDiscounts(id: number) {
+    try {
+      return await this.discountsService.getDiscountByEvent(id);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async createEventDiscount(id: number, discount: Discount) {
+    try {
+      return await this.discountsService.createDiscount(discount);
+    } catch (error) {
+      throw error;
+    }
   }
 }

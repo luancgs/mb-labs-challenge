@@ -11,6 +11,8 @@ import {
   HttpStatus,
   UseGuards,
 } from '@nestjs/common';
+import { Discount } from 'src/discounts/discount.entity';
+import { DiscountCreateError } from 'src/discounts/errors/discount.create.error';
 import { AdminJwtAuthGuard } from '../auth/admin/admin.jwt.auth.guard';
 import { JwtAuthGuard } from '../auth/jwt.auth.guard';
 import { EventCreateError } from './errors/event.create.error';
@@ -48,14 +50,51 @@ export class EventsController {
 
   @Get(':id')
   @UseGuards(JwtAuthGuard)
-  async getById(@Param('id') id: number) {
+  async get(@Param('id') id: number) {
     try {
-      return await this.service.getEventById(id);
+      return await this.service.getEvent(id);
     } catch (error) {
       throw new HttpException(
         `Error: ${error.message}`,
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
+    }
+  }
+
+  @Get(':id/discounts')
+  @UseGuards(JwtAuthGuard)
+  async getEventDiscounts(@Param('id') id: number) {
+    try {
+      return await this.service.getEventDiscounts(id);
+    } catch (error) {
+      throw new HttpException(
+        `Error: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+  @Post(':id/discounts')
+  @UseGuards(AdminJwtAuthGuard)
+  async createEventDiscount(
+    @Param('id') id: number,
+    @Body() discount: Discount,
+  ) {
+    try {
+      await this.service.createEventDiscount(id, discount);
+      return 'discount created successfully';
+    } catch (error) {
+      if (error instanceof DiscountCreateError) {
+        throw new HttpException(
+          `Bad Request: ${error.message}`,
+          HttpStatus.BAD_REQUEST,
+        );
+      } else {
+        throw new HttpException(
+          `Error: ${error.message}`,
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
   }
 
