@@ -23,11 +23,23 @@ export class UsersService {
     }
   }
 
-  async getUser(_id: number): Promise<User[]> {
+  async getUserById(_id: number): Promise<User[]> {
     try {
       return await this.usersRepository.find({
         where: [{ id: _id }],
       });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getUserByEmail(_email: string): Promise<User> {
+    try {
+      return await this.usersRepository
+        .createQueryBuilder('user')
+        .where('user.email = :email', { email: _email })
+        .addSelect('user.password')
+        .getOne();
     } catch (error) {
       throw error;
     }
@@ -49,7 +61,6 @@ export class UsersService {
     try {
       await this.usersRepository.update(id, user);
     } catch (error) {
-      console.log(error);
       if (
         error instanceof QueryFailedError ||
         error instanceof EntityPropertyNotFoundError

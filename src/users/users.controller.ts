@@ -32,7 +32,7 @@ export class UsersController {
   @Get(':id')
   async get(@Param('id') id: number) {
     try {
-      return await this.service.getUser(id);
+      return await this.service.getUserById(id);
     } catch (error) {
       throw new HttpException(
         `Error: ${error.message}`,
