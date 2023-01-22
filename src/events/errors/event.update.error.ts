@@ -3,7 +3,7 @@ export class EventUpdateError extends Error {
     super(message);
 
     if (message.includes('CHK_contact')) {
-      this.message = 'event must have one or more contact information';
+      this.message = 'event must have at least one contact information';
     }
   }
 }
