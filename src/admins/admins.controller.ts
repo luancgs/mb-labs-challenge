@@ -8,13 +8,16 @@ import {
   Param,
   HttpException,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
+import { AdminJwtAuthGuard } from '../auth/admin/admin.jwt.auth.guard';
 import { Admin } from './admin.entity';
 import { AdminsService } from './admins.service';
 import { AdminCreateError } from './errors/admin.create.error';
 import { AdminUpdateError } from './errors/admin.update.error';
 
 @Controller('admins')
+@UseGuards(AdminJwtAuthGuard)
 export class AdminsController {
   constructor(private service: AdminsService) {}
 
