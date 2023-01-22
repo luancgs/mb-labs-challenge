@@ -8,6 +8,7 @@ import {
 import { UserCreateError } from './errors/user.create.error';
 import { UserUpdateError } from './errors/user.update.error';
 import { User } from './user.entity';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -47,6 +48,8 @@ export class UsersService {
 
   async createUser(user: User) {
     try {
+      const passwordHash = await bcrypt.hash(user.password, 10);
+      user.password = passwordHash;
       await this.usersRepository.insert(user);
     } catch (error) {
       if (error instanceof QueryFailedError) {
@@ -59,6 +62,10 @@ export class UsersService {
 
   async updateUser(id: number, user: Partial<User>) {
     try {
+      if (user.password) {
+        const passwordHash = await bcrypt.hash(user.password, 10);
+        user.password = passwordHash;
+      }
       await this.usersRepository.update(id, user);
     } catch (error) {
       if (

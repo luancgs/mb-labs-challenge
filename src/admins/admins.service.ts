@@ -4,6 +4,7 @@ import { QueryFailedError, Repository } from 'typeorm';
 import { Admin } from './admin.entity';
 import { AdminCreateError } from './errors/admin.create.error';
 import { AdminUpdateError } from './errors/admin.update.error';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AdminsService {
@@ -43,6 +44,8 @@ export class AdminsService {
 
   async createAdmin(admin: Admin) {
     try {
+      const passwordHash = await bcrypt.hash(admin.password, 10);
+      admin.password = passwordHash;
       await this.adminsRepository.insert(admin);
     } catch (error) {
       if (error instanceof QueryFailedError) {
@@ -55,6 +58,10 @@ export class AdminsService {
 
   async updateAdmin(id: number, admin: Partial<Admin>) {
     try {
+      if (admin.password) {
+        const passwordHash = await bcrypt.hash(admin.password, 10);
+        admin.password = passwordHash;
+      }
       await this.adminsRepository.update(id, admin);
     } catch (error) {
       if (error instanceof QueryFailedError) {

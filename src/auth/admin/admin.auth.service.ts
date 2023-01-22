@@ -11,13 +11,16 @@ export class AdminAuthService {
   ) {}
 
   async validate(email: string, pass: string): Promise<any> {
-    //const hash = await bcrypt.hash(pass, 10);
     const admin = await this.adminsService.getAdminByEmail(email);
 
-    if (admin && admin.password === pass) {
-      const { password, ...result } = admin;
-      return result;
+    if (admin) {
+      const passwordMatch = await bcrypt.compare(pass, admin.password);
+      if (passwordMatch) {
+        const { password, ...result } = admin;
+        return result;
+      }
     }
+
     return null;
   }
 
