@@ -14,6 +14,7 @@ import { AdminJwtAuthGuard } from '../auth/admin/admin.jwt.auth.guard';
 import { Admin } from './admin.entity';
 import { AdminsService } from './admins.service';
 import { AdminCreateError } from './errors/admin.create.error';
+import { AdminDeleteError } from './errors/admin.delete.error';
 import { AdminUpdateError } from './errors/admin.update.error';
 
 @Controller('admins')
@@ -91,10 +92,17 @@ export class AdminsController {
       await this.service.deleteAdmin(id);
       return 'admin deleted successfully';
     } catch (error) {
-      throw new HttpException(
-        `Error: ${error.message}`,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+      if (error instanceof AdminDeleteError) {
+        throw new HttpException(
+          `Failed Request: ${error.message}`,
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
+      } else {
+        throw new HttpException(
+          `Error: ${error.message}`,
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
     }
   }
 }

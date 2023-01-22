@@ -4,6 +4,7 @@ import { QueryFailedError, Repository } from 'typeorm';
 import { Admin } from './admin.entity';
 import { AdminCreateError } from './errors/admin.create.error';
 import { AdminUpdateError } from './errors/admin.update.error';
+import { AdminDeleteError } from './errors/admin.delete.error';
 import * as bcrypt from 'bcrypt';
 
 @Injectable()
@@ -74,7 +75,10 @@ export class AdminsService {
 
   async deleteAdmin(id: number) {
     try {
-      return await this.adminsRepository.delete(id);
+      const deleteResult = await this.adminsRepository.delete(id);
+      if (deleteResult.affected === 0) {
+        throw new AdminDeleteError('admin id not found');
+      }
     } catch (error) {
       throw error;
     }
