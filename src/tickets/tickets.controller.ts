@@ -8,7 +8,10 @@ import {
   Param,
   HttpException,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
+import { AdminJwtAuthGuard } from '../auth/admin/admin.jwt.auth.guard';
+import { JwtAuthGuard } from '../auth/jwt.auth.guard';
 import { TicketCreateError } from './errors/ticket.create.error';
 import { TicketUpdateError } from './errors/ticket.update.error';
 import { Ticket } from './ticket.entity';
@@ -19,6 +22,7 @@ export class TicketsController {
   constructor(private service: TicketsService) {}
 
   @Get()
+  @UseGuards(AdminJwtAuthGuard)
   async getAll() {
     try {
       return await this.service.getTickets();
@@ -31,6 +35,7 @@ export class TicketsController {
   }
 
   @Get(':id')
+  @UseGuards(AdminJwtAuthGuard)
   async getById(@Param('id') id: number) {
     try {
       return await this.service.getTicketById(id);
@@ -43,6 +48,7 @@ export class TicketsController {
   }
 
   @Post()
+  @UseGuards(JwtAuthGuard)
   async create(@Body() ticket: Ticket) {
     try {
       await this.service.createTicket(ticket);
@@ -63,6 +69,7 @@ export class TicketsController {
   }
 
   @Put(':id')
+  @UseGuards(AdminJwtAuthGuard)
   async update(@Param('id') id: number, @Body() ticket: Partial<Ticket>) {
     try {
       await this.service.updateTicket(id, ticket);
@@ -83,6 +90,7 @@ export class TicketsController {
   }
 
   @Delete(':id')
+  @UseGuards(AdminJwtAuthGuard)
   async delete(@Param('id') id: number) {
     try {
       await this.service.deleteTicket(id);
