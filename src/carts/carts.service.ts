@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm';
-import { Cart } from './cart.entity';
+import { Cart } from './entities/cart.entity';
 import { CartGetDto } from './DTOs/cart.get.dto';
 import { CartDeleteError } from './errors/cart.delete.error';
 import { CartUpdateError } from './errors/cart.update.error';

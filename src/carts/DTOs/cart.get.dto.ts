@@ -1,5 +1,5 @@
-import { Cart } from '../cart.entity';
-import { Discount } from '../../discounts/discount.entity';
+import { Cart } from '../entities/cart.entity';
+import { Discount } from '../../discounts/entities/discount.entity';
 import { EventGetDto } from '../../events/DTOs/event.get.dto';
 
 export class CartGetDto {

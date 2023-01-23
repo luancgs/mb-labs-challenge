@@ -5,9 +5,9 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
-import { Event } from '../events/event.entity';
-import { User } from '../users/user.entity';
-import { Discount } from '../discounts/discount.entity';
+import { Event } from '../../events/entities/event.entity';
+import { User } from '../../users/entities/user.entity';
+import { Discount } from '../../discounts/entities/discount.entity';
 
 @Entity()
 export class Cart {
