@@ -7,12 +7,9 @@ import Stripe from 'stripe';
 export class PaymentService {
   private stripe: Stripe;
   constructor() {
-    this.stripe = new Stripe(
-      'sk_test_51MTAleKy0qIw48KVzL1OgObiAzltHNn7mPqlZfAbKLuqrmZhLZcESJW7SZSXlsoICHPvaTQVuKdWPqxi1H7n4XpR00GPtG0Dqg',
-      {
-        apiVersion: '2022-11-15',
-      },
-    );
+    this.stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+      apiVersion: '2022-11-15',
+    });
   }
   calculateCartValue(cart: CartGetDto[]): number {
     let value = 0;

@@ -17,13 +17,16 @@ import { PaymentModule } from './payment/payment.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'mysql-db',
       port: 3306,
-      username: 'admin',
-      password: 'admin',
-      database: 'MBLABS',
+      username: process.env.DATABASE_USERNAME,
+      password: process.env.DATABASE_PASSWORD,
+      database: process.env.DATABASE_TITLE,
       entities: [join(__dirname, '**', '*.entity.{ts,js}')],
       synchronize: false,
     }),
