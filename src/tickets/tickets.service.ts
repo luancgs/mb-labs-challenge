@@ -8,7 +8,7 @@ import {
 import { TicketCreateError } from './errors/ticket.create.error';
 import { TicketDeleteError } from './errors/ticket.delete.error';
 import { TicketUpdateError } from './errors/ticket.update.error';
-import { Ticket } from './ticket.entity';
+import { Ticket } from './entities/ticket.entity';
 import { CartGetDto } from '../carts/DTOs/cart.get.dto';
 
 @Injectable()
