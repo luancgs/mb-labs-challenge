@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Discount } from '../discounts/discount.entity';
+import { Discount } from '../discounts/entities/discount.entity';
 import { DiscountsService } from '../discounts/discounts.service';
 
 import {
@@ -16,7 +16,7 @@ import { EventGetDto } from './DTOs/event.get.dto';
 import { EventCreateError } from './errors/event.create.error';
 import { EventDeleteError } from './errors/event.delete.error';
 import { EventUpdateError } from './errors/event.update.error';
-import { Event } from './event.entity';
+import { Event } from './entities/event.entity';
 
 @Injectable()
 export class EventsService {

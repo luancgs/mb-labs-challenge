@@ -1,4 +1,4 @@
-import { Event } from '../event.entity';
+import { Event } from '../entities/event.entity';
 import { OrganizerGetDto } from '../../organizers/DTOs/organizer.get.dto';
 
 export class EventGetDto {

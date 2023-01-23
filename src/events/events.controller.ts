@@ -13,9 +13,9 @@ import {
 } from '@nestjs/common';
 import { AdminJwtAuthGuard } from '../auth/admin/admin.jwt.auth.guard';
 import { JwtAuthGuard } from '../auth/jwt.auth.guard';
-import { Discount } from '../discounts/discount.entity';
+import { Discount } from '../discounts/entities/discount.entity';
 import { DiscountCreateError } from '../discounts/errors/discount.create.error';
-import { Event } from './event.entity';
+import { Event } from './entities/event.entity';
 import { EventsService } from './events.service';
 import { EventCreateError } from './errors/event.create.error';
 import { EventDeleteError } from './errors/event.delete.error';

@@ -5,8 +5,8 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
-import { Organizer } from '../organizers/organizer.entity';
-import { Admin } from '../admins/admin.entity';
+import { Organizer } from '../../organizers/entities/organizer.entity';
+import { Admin } from '../../admins/entities/admin.entity';
 
 @Entity()
 export class Event {
