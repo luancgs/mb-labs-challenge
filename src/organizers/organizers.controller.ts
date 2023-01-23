@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { AdminJwtAuthGuard } from '../auth/admin/admin.jwt.auth.guard';
 import { JwtAuthGuard } from '../auth/jwt.auth.guard';
-import { Organizer } from './organizer.entity';
+import { Organizer } from './entities/organizer.entity';
 import { OrganizersService } from './organizers.service';
 import { OrganizerCreateError } from './errors/organizer.create.error';
 import { OrganizerUpdateError } from './errors/organizer.update.error';

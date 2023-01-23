@@ -1,4 +1,4 @@
-import { Organizer } from '../organizer.entity';
+import { Organizer } from '../entities/organizer.entity';
 
 export class OrganizerGetDto {
   id: number;

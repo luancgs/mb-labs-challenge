@@ -5,7 +5,7 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
-import { Admin } from '../admins/admin.entity';
+import { Admin } from '../../admins/entities/admin.entity';
 
 @Entity()
 export class Organizer {

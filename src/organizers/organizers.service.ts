@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, QueryFailedError, Repository } from 'typeorm';
-import { Organizer } from './organizer.entity';
+import { Organizer } from './entities/organizer.entity';
 import { OrganizerCreateError } from './errors/organizer.create.error';
 import { OrganizerUpdateError } from './errors/organizer.update.error';
 import { OrganizerDeleteError } from './errors/organizer.delete.error';
