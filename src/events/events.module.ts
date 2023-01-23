@@ -9,5 +9,6 @@ import { DiscountsModule } from 'src/discounts/discounts.module';
   imports: [TypeOrmModule.forFeature([Event]), DiscountsModule],
   providers: [EventsService],
   controllers: [EventsController],
+  exports: [EventsService],
 })
 export class EventsModule {}

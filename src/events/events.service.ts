@@ -153,4 +153,23 @@ export class EventsService {
       throw error;
     }
   }
+
+  async reduceEventTickets(_id: number, quantity: number) {
+    try {
+      await this.eventsRepository.decrement(
+        { id: _id },
+        'availableTickets',
+        quantity,
+      );
+    } catch (error) {
+      if (
+        error instanceof QueryFailedError ||
+        error instanceof EntityPropertyNotFoundError
+      ) {
+        throw new EventUpdateError(error.message);
+      } else {
+        throw error;
+      }
+    }
+  }
 }
