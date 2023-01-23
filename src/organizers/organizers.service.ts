@@ -14,7 +14,7 @@ export class OrganizersService {
     private organizersRepository: Repository<Organizer>,
   ) {}
 
-  async getOrganizers(_name: string): Promise<OrganizerGetDto[]> {
+  async getOrganizers(_name?: string): Promise<OrganizerGetDto[]> {
     try {
       let organizers: Organizer[];
 
