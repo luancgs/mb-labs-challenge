@@ -1,6 +1,6 @@
 import { HttpException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
-import { Admin } from './admin.entity';
+import { Admin } from './entities/admin.entity';
 import { AdminsController } from './admins.controller';
 import { AdminsService } from './admins.service';
 import { AdminCreateError } from './errors/admin.create.error';

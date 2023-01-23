@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm';
-import { Admin } from './admin.entity';
+import { Admin } from './entities/admin.entity';
 import { AdminCreateError } from './errors/admin.create.error';
 import { AdminUpdateError } from './errors/admin.update.error';
 import { AdminDeleteError } from './errors/admin.delete.error';

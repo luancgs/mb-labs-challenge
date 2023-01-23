@@ -1,11 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm';
-import { Admin } from './admin.entity';
+import { Admin } from './entities/admin.entity';
 import { AdminsService } from './admins.service';
 import { AdminCreateError } from './errors/admin.create.error';
 import { AdminDeleteError } from './errors/admin.delete.error';
 import { AdminUpdateError } from './errors/admin.update.error';
+import { AdminMock } from './entities/admin.mock';
 
 describe('AdminsService', () => {
   let service: AdminsService;
@@ -256,19 +257,4 @@ describe('AdminsService', () => {
   });
 });
 
-const adminsDataMock: Admin[] = [
-  {
-    id: 1,
-    name: 'John Doe',
-    email: 'johndoe@example.com',
-    password: '$2b$10$qsmPDn0vKxCuhpQXSHqxyeXq4ZXAoYyEaUWlgqCvbYgFBiNBqomAq',
-    createdAt: new Date(),
-  },
-  {
-    id: 2,
-    name: 'Jane Smith',
-    email: 'janesmith@example.com',
-    password: '$2b$10$qsmPDn0vKxCuhpQXSHqxyeXq4ZXAoYyEaUWlgqCvbYgFBiNBqomAq',
-    createdAt: new Date(),
-  },
-];
+const adminsDataMock: Admin[] = [new AdminMock(1), new AdminMock(2)];
