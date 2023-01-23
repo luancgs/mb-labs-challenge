@@ -1,4 +1,4 @@
-import { AdminMock } from 'src/admins/entities/admin.mock';
+import { AdminMock } from '../../admins/entities/admin.mock';
 import { Organizer } from './organizer.entity';
 
 export class OrganizerMock extends Organizer {

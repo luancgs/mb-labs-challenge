@@ -18,7 +18,7 @@ import { User } from './entities/user.entity';
 import { UserCreateError } from './errors/user.create.error';
 import { UserUpdateError } from './errors/user.update.error';
 import { UserDeleteError } from './errors/user.delete.error';
-import { Cart } from '../carts/cart.entity';
+import { Cart } from '../carts/entities/cart.entity';
 
 @Controller('users')
 export class UsersController {

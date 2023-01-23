@@ -1,6 +1,6 @@
-import { DiscountMock } from 'src/discounts/entities/discount.mock';
-import { EventMock } from 'src/events/entities/event.mock';
-import { UserMock } from 'src/users/entities/user.mock';
+import { DiscountMock } from '../../discounts/entities/discount.mock';
+import { EventMock } from '../../events/entities/event.mock';
+import { UserMock } from '../../users/entities/user.mock';
 import { Cart } from './cart.entity';
 
 export class CartMock extends Cart {

@@ -1,5 +1,5 @@
-import { AdminMock } from 'src/admins/entities/admin.mock';
-import { EventMock } from 'src/events/entities/event.mock';
+import { AdminMock } from '../../admins/entities/admin.mock';
+import { EventMock } from '../../events/entities/event.mock';
 import { Discount } from './discount.entity';
 
 export class DiscountMock extends Discount {
