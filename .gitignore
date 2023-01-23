@@ -37,3 +37,6 @@ lerna-debug.log*
 # Development volumes
 /database
 /workbench
+
+# Environment variables
+.env
