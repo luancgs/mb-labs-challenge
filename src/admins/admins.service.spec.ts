@@ -182,7 +182,7 @@ describe('AdminsService', () => {
       expect(result).toBeUndefined();
     });
 
-    it('must throw AdminCreateErrors errors', async () => {
+    it('should throw AdminUpdateErrors errors', async () => {
       jest.spyOn(adminsRepository, 'update').mockImplementation(() => {
         throw new QueryFailedError('query error', ['a'], 'query error');
       });
@@ -194,7 +194,7 @@ describe('AdminsService', () => {
       }
     });
 
-    it('must throw generic errors', async () => {
+    it('should throw generic errors', async () => {
       jest.spyOn(adminsRepository, 'update').mockImplementation(() => {
         throw new Error('generic error');
       });
