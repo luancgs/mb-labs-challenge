@@ -9,7 +9,7 @@ import { UserCreateError } from './errors/user.create.error';
 import { UserUpdateError } from './errors/user.update.error';
 import { UserDeleteError } from './errors/user.delete.error';
 import { UserCartError } from './errors/user.cart.error';
-import { User } from './user.entity';
+import { User } from './entities/user.entity';
 import { CartsService } from '../carts/carts.service';
 import { PaymentService } from '../payment/payment.service';
 import * as bcrypt from 'bcrypt';

@@ -6,7 +6,7 @@ import { TicketsModule } from '../tickets/tickets.module';
 import { EventsModule } from '../events/events.module';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
-import { User } from './user.entity';
+import { User } from './entities/user.entity';
 
 @Module({
   imports: [
