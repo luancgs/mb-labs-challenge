@@ -1,9 +1,17 @@
-import { Controller, Request, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Request,
+  Get,
+  Post,
+  UseGuards,
+  Body,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 import { UserLocalAuthGuard } from './auth/user/user.local.auth.guard';
 import { AdminLocalAuthGuard } from './auth/admin/admin.local.auth.guard';
 import { UserAuthService } from './auth/user/user.auth.service';
 import { AdminAuthService } from './auth/admin/admin.auth.service';
+import Stripe from 'stripe';
 
 @Controller()
 export class AppController {
@@ -28,5 +36,22 @@ export class AppController {
   @Post('auth/admin')
   async loginAdmin(@Request() req) {
     return this.adminAuthService.login(req.user);
+  }
+
+  @Post('/payment-webhook')
+  async paymentWebhook(@Body() stripeEvent: Stripe.Event) {
+    switch (stripeEvent.type) {
+      case 'payment_intent.succeeded':
+        const paymentIntent = stripeEvent.data.object;
+        console.log('success:', paymentIntent);
+        break;
+      case 'payment_intent.canceled':
+        const paymentIntent2 = stripeEvent.data.object;
+        console.log('canceled', paymentIntent2);
+        break;
+      default:
+        console.log(`Unhandled event type ${stripeEvent.type}`);
+    }
+    return;
   }
 }
