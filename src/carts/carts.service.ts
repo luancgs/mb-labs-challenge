@@ -23,7 +23,6 @@ export class CartsService {
       for (const cart of carts) {
         output.push(new CartGetDto(cart));
       }
-      console.log(output);
       return output;
     } catch (error) {
       throw error;
