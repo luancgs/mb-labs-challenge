@@ -50,7 +50,6 @@ export class UsersController {
   }
 
   @Post()
-  @UseGuards(AdminJwtAuthGuard)
   async create(@Body() user: User) {
     try {
       await this.service.createUser(user);
