@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@nestjs/common": "^9.2.1",
+    "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^9.2.1",
     "@nestjs/jwt": "^10.0.1",
     "@nestjs/passport": "^9.0.0",
@@ -31,9 +32,9 @@
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
-    "qrcode-pix": "5.0.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
+    "stripe": "^11.7.0",
     "typeorm": "^0.3.11"
   },
   "devDependencies": {
