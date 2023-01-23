@@ -11,15 +11,15 @@ import {
   HttpStatus,
   UseGuards,
 } from '@nestjs/common';
-import { Discount } from 'src/discounts/discount.entity';
-import { DiscountCreateError } from 'src/discounts/errors/discount.create.error';
 import { AdminJwtAuthGuard } from '../auth/admin/admin.jwt.auth.guard';
 import { JwtAuthGuard } from '../auth/jwt.auth.guard';
+import { Discount } from '../discounts/discount.entity';
+import { DiscountCreateError } from '../discounts/errors/discount.create.error';
+import { Event } from './event.entity';
+import { EventsService } from './events.service';
 import { EventCreateError } from './errors/event.create.error';
 import { EventDeleteError } from './errors/event.delete.error';
 import { EventUpdateError } from './errors/event.update.error';
-import { Event } from './event.entity';
-import { EventsService } from './events.service';
 
 @Controller('events')
 export class EventsController {

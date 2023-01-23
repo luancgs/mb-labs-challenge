@@ -13,12 +13,12 @@ import { User } from './user.entity';
 import { CartsService } from '../carts/carts.service';
 import { PaymentService } from '../payment/payment.service';
 import * as bcrypt from 'bcrypt';
-import { Cart } from 'src/carts/cart.entity';
-import { TicketsService } from 'src/tickets/tickets.service';
-import { CartGetDto } from 'src/carts/DTOs/cart.get.dto';
-import { TicketCreateError } from 'src/tickets/errors/ticket.create.error';
-import { CartDeleteError } from 'src/carts/errors/cart.delete.error';
-import { EventsService } from 'src/events/events.service';
+import { Cart } from '../carts/cart.entity';
+import { TicketsService } from '../tickets/tickets.service';
+import { CartGetDto } from '../carts/DTOs/cart.get.dto';
+import { TicketCreateError } from '../tickets/errors/ticket.create.error';
+import { CartDeleteError } from '../carts/errors/cart.delete.error';
+import { EventsService } from '../events/events.service';
 
 @Injectable()
 export class UsersService {

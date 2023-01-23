@@ -11,13 +11,13 @@ import {
   UseGuards,
   Query,
 } from '@nestjs/common';
+import { AdminJwtAuthGuard } from '../auth/admin/admin.jwt.auth.guard';
+import { JwtAuthGuard } from '../auth/jwt.auth.guard';
 import { Organizer } from './organizer.entity';
 import { OrganizersService } from './organizers.service';
 import { OrganizerCreateError } from './errors/organizer.create.error';
 import { OrganizerUpdateError } from './errors/organizer.update.error';
 import { OrganizerDeleteError } from './errors/organizer.delete.error';
-import { AdminJwtAuthGuard } from '../auth/admin/admin.jwt.auth.guard';
-import { JwtAuthGuard } from '../auth/jwt.auth.guard';
 
 @Controller('organizers')
 export class OrganizersController {

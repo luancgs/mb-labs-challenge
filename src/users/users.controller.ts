@@ -11,14 +11,14 @@ import {
   UseGuards,
   Headers,
 } from '@nestjs/common';
+import { AdminJwtAuthGuard } from '../auth/admin/admin.jwt.auth.guard';
+import { JwtAuthGuard } from '../auth/jwt.auth.guard';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
 import { UserCreateError } from './errors/user.create.error';
 import { UserUpdateError } from './errors/user.update.error';
 import { UserDeleteError } from './errors/user.delete.error';
-import { AdminJwtAuthGuard } from '../auth/admin/admin.jwt.auth.guard';
-import { JwtAuthGuard } from 'src/auth/jwt.auth.guard';
-import { Cart } from 'src/carts/cart.entity';
+import { Cart } from '../carts/cart.entity';
 
 @Controller('users')
 export class UsersController {

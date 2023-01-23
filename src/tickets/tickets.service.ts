@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CartGetDto } from 'src/carts/DTOs/cart.get.dto';
 import {
   EntityPropertyNotFoundError,
   QueryFailedError,
@@ -10,6 +9,7 @@ import { TicketCreateError } from './errors/ticket.create.error';
 import { TicketDeleteError } from './errors/ticket.delete.error';
 import { TicketUpdateError } from './errors/ticket.update.error';
 import { Ticket } from './ticket.entity';
+import { CartGetDto } from '../carts/DTOs/cart.get.dto';
 
 @Injectable()
 export class TicketsService {

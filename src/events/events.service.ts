@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Discount } from 'src/discounts/discount.entity';
-import { DiscountsService } from 'src/discounts/discounts.service';
+import { Discount } from '../discounts/discount.entity';
+import { DiscountsService } from '../discounts/discounts.service';
 
 import {
   EntityPropertyNotFoundError,
