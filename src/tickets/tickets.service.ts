@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CartGetDto } from 'src/carts/DTOs/cart.get.dto';
 import {
   EntityPropertyNotFoundError,
   QueryFailedError,
@@ -38,6 +39,27 @@ export class TicketsService {
 
   async createTicket(ticket: Ticket) {
     try {
+      await this.ticketsRepository.insert(ticket);
+    } catch (error) {
+      if (error instanceof QueryFailedError) {
+        throw new TicketCreateError(error.message);
+      } else {
+        throw error;
+      }
+    }
+  }
+
+  async createTicketByCartItem(cartItem: CartGetDto) {
+    try {
+      const ticketStructure: any = {
+        user: cartItem.user,
+        event: cartItem.event.id,
+        discount: cartItem.discount === null ? null : cartItem.discount.id,
+      };
+      const ticket = await this.ticketsRepository.manager.create(
+        Ticket,
+        ticketStructure,
+      );
       await this.ticketsRepository.insert(ticket);
     } catch (error) {
       if (error instanceof QueryFailedError) {
