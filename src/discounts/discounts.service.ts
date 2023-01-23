@@ -18,7 +18,7 @@ export class DiscountsService {
     private discountsRepository: Repository<Discount>,
   ) {}
 
-  async getDiscounts(_code: string): Promise<DiscountGetDto[]> {
+  async getDiscounts(_code?: string): Promise<DiscountGetDto[]> {
     try {
       let discounts: Discount[];
 
