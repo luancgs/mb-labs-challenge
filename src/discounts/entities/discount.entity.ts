@@ -5,8 +5,8 @@ import {
   OneToOne,
   JoinColumn,
 } from 'typeorm';
-import { Event } from '../events/event.entity';
-import { Admin } from '../admins/admin.entity';
+import { Event } from '../../events/entities/event.entity';
+import { Admin } from '../../admins/entities/admin.entity';
 
 @Entity()
 export class Discount {

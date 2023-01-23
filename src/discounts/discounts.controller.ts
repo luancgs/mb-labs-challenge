@@ -13,7 +13,7 @@ import {
 } from '@nestjs/common';
 import { AdminJwtAuthGuard } from '../auth/admin/admin.jwt.auth.guard';
 import { JwtAuthGuard } from '../auth/jwt.auth.guard';
-import { Discount } from './discount.entity';
+import { Discount } from './entities/discount.entity';
 import { DiscountsService } from './discounts.service';
 import { DiscountCreateError } from './errors/discount.create.error';
 import { DiscountDeleteError } from './errors/discount.delete.error';

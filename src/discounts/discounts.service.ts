@@ -5,7 +5,7 @@ import {
   QueryFailedError,
   Repository,
 } from 'typeorm';
-import { Discount } from './discount.entity';
+import { Discount } from './entities/discount.entity';
 import { DiscountGetDto } from './DTOs/discount.get.dto';
 import { DiscountCreateError } from './errors/discount.create.error';
 import { DiscountDeleteError } from './errors/discount.delete.error';

@@ -1,5 +1,5 @@
-import { Discount } from '../discount.entity';
-import { Event } from '../../events/event.entity';
+import { Discount } from '../entities/discount.entity';
+import { Event } from '../../events/entities/event.entity';
 
 export class DiscountGetDto {
   id: number;
