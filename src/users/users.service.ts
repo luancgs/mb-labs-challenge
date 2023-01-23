@@ -8,13 +8,17 @@ import {
 import { UserCreateError } from './errors/user.create.error';
 import { UserUpdateError } from './errors/user.update.error';
 import { UserDeleteError } from './errors/user.delete.error';
-import { PaymentMethodError } from 'src/payment/errors/payment.method.error';
 import { UserCartError } from './errors/user.cart.error';
 import { User } from './user.entity';
 import { CartsService } from '../carts/carts.service';
 import { PaymentService } from '../payment/payment.service';
 import * as bcrypt from 'bcrypt';
 import { Cart } from 'src/carts/cart.entity';
+import { TicketsService } from 'src/tickets/tickets.service';
+import { CartGetDto } from 'src/carts/DTOs/cart.get.dto';
+import { TicketCreateError } from 'src/tickets/errors/ticket.create.error';
+import { CartDeleteError } from 'src/carts/errors/cart.delete.error';
+import { EventsService } from 'src/events/events.service';
 
 @Injectable()
 export class UsersService {
@@ -22,6 +26,8 @@ export class UsersService {
     @InjectRepository(User) private usersRepository: Repository<User>,
     private cartsService: CartsService,
     private paymentService: PaymentService,
+    private ticketsService: TicketsService,
+    private eventsService: EventsService,
   ) {}
 
   async getUsers(): Promise<User[]> {
@@ -114,7 +120,7 @@ export class UsersService {
     }
   }
 
-  async buyCart(id: number, paymentMethod: string) {
+  async buyCart(id: number, paymentMethod: string, paymentMethodData: any) {
     try {
       const cart = await this.getUserCart(id);
 
@@ -123,20 +129,39 @@ export class UsersService {
 
       const value = this.paymentService.calculateCartValue(cart);
 
-      if (paymentMethod === 'pix') {
-        const pixOutput = await this.paymentService.generatePix(
-          id,
-          'Compra de Ingressos',
-          value,
-        );
+      await this.paymentService.executePayment(
+        value,
+        paymentMethod,
+        paymentMethodData,
+      );
 
-        //await this.cartsService.deleteCartByUserId(id);
-        return pixOutput;
-      } else {
-        throw new PaymentMethodError('invalid payment method');
-      }
+      await this.afterBuy(id, cart);
+
+      return 'payment successful';
     } catch (error) {
       throw error;
+    }
+  }
+
+  async afterBuy(userId: number, cart: CartGetDto[]) {
+    try {
+      for (const item of cart) {
+        for (let i = 0; i < item.quantity; i++) {
+          await this.ticketsService.createTicketByCartItem(item);
+        }
+        await this.eventsService.reduceEventTickets(
+          item.event.id,
+          item.quantity,
+        );
+      }
+    } catch (error) {
+      throw new TicketCreateError(error.message);
+    }
+
+    try {
+      //await this.cartsService.deleteCartByUserId(userId);
+    } catch (error) {
+      throw new CartDeleteError(error.message);
     }
   }
 }

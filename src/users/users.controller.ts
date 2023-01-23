@@ -140,11 +140,15 @@ export class UsersController {
 
   @Post(':id/buy')
   @UseGuards(JwtAuthGuard)
-  async buyUserCart(@Param('id') id: number, @Headers() headers) {
+  async buyUserCart(
+    @Param('id') id: number,
+    @Headers() headers,
+    @Body() paymentMethodData,
+  ) {
     try {
       const paymentMethod = headers['payment-method'];
       if (paymentMethod) {
-        return await this.service.buyCart(id, paymentMethod);
+        return await this.service.buyCart(id, paymentMethod, paymentMethodData);
       } else {
         throw new HttpException(
           `Error: invalid payment method`,
