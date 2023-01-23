@@ -1,10 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { QrCodePix } from 'qrcode-pix';
 import { CartGetDto } from '../carts/DTOs/cart.get.dto';
-import { PixError } from './errors/pix.error';
+import { PaymentMethodError } from './errors/payment.method.error';
+import Stripe from 'stripe';
 
 @Injectable()
 export class PaymentService {
+  private stripe: Stripe;
+  constructor() {
+    this.stripe = new Stripe(
+      'sk_test_51MTAleKy0qIw48KVzL1OgObiAzltHNn7mPqlZfAbKLuqrmZhLZcESJW7SZSXlsoICHPvaTQVuKdWPqxi1H7n4XpR00GPtG0Dqg',
+      {
+        apiVersion: '2022-11-15',
+      },
+    );
+  }
   calculateCartValue(cart: CartGetDto[]): number {
     let value = 0;
     for (const item of cart) {
@@ -18,28 +27,74 @@ export class PaymentService {
       }
     }
 
-    return value;
+    return Math.round(value * 100);
   }
 
-  async generatePix(id: number, _message: string, _value: number) {
-    const qrCodePix = QrCodePix({
-      version: '01',
-      key: '00000000000',
-      name: 'Luan Carlos Gonçalves Silva',
-      city: 'UBERLANDIA',
-      transactionId: '***',
-      message: _message,
-      value: _value,
-    });
-    console.log(_value);
-
+  async createPaymentIntent(value: number) {
     try {
-      return {
-        payload: qrCodePix.payload(),
-        qrCode: await qrCodePix.base64(),
-      };
+      const intent = await this.stripe.paymentIntents.create({
+        amount: value,
+        currency: 'brl',
+        payment_method_types: ['card', 'boleto'],
+      });
+      return intent.id;
     } catch (error) {
-      throw new PixError(error.message);
+      throw error;
     }
+  }
+
+  async createPaymentMethodCard(data: Stripe.PaymentMethodCreateParams.Card1) {
+    try {
+      const method = await this.stripe.paymentMethods.create({
+        card: {
+          exp_month: data.exp_month,
+          exp_year: data.exp_year,
+          number: data.number,
+          cvc: data.cvc,
+        },
+        type: 'card',
+      });
+      return method.id;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async createPaymentMethodBoleto(data: any) {
+    try {
+      const method = await this.stripe.paymentMethods.create({
+        boleto: {
+          tax_id: data.tax_id,
+        },
+        billing_details: {
+          email: data.email,
+        },
+        type: 'boleto',
+      });
+      return method.id;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async executePayment(value: number, method: string, data: any) {
+    const paymentIntentId = await this.createPaymentIntent(value);
+
+    let paymentMethodId: string;
+    if (method === 'card') {
+      paymentMethodId = await this.createPaymentMethodCard(data);
+    } else if (method === 'boleto') {
+      paymentMethodId = await this.createPaymentMethodBoleto(data);
+    } else {
+      throw new PaymentMethodError('invalid payment method');
+    }
+
+    return await this.confirmPaymentIntent(paymentIntentId, paymentMethodId);
+  }
+
+  async confirmPaymentIntent(paymentIntentId: string, paymentMethod: string) {
+    await this.stripe.paymentIntents.confirm(paymentIntentId, {
+      payment_method: paymentMethod,
+    });
   }
 }
