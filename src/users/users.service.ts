@@ -13,7 +13,7 @@ import { User } from './entities/user.entity';
 import { CartsService } from '../carts/carts.service';
 import { PaymentService } from '../payment/payment.service';
 import * as bcrypt from 'bcrypt';
-import { Cart } from '../carts/cart.entity';
+import { Cart } from '../carts/entities/cart.entity';
 import { TicketsService } from '../tickets/tickets.service';
 import { CartGetDto } from '../carts/DTOs/cart.get.dto';
 import { TicketCreateError } from '../tickets/errors/ticket.create.error';
@@ -99,6 +99,14 @@ export class UsersService {
       if (deleteResult.affected === 0) {
         throw new UserDeleteError('user id not found');
       }
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getUserTickets(id: number) {
+    try {
+      return await this.ticketsService.getTicketByUser(id);
     } catch (error) {
       throw error;
     }
