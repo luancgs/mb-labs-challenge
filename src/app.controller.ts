@@ -1,12 +1,4 @@
-import {
-  Controller,
-  Request,
-  Get,
-  Post,
-  UseGuards,
-  Body,
-} from '@nestjs/common';
-import { AppService } from './app.service';
+import { Controller, Request, Post, UseGuards, Body } from '@nestjs/common';
 import { UserLocalAuthGuard } from './auth/user/user.local.auth.guard';
 import { AdminLocalAuthGuard } from './auth/admin/admin.local.auth.guard';
 import { UserAuthService } from './auth/user/user.auth.service';
@@ -16,15 +8,9 @@ import Stripe from 'stripe';
 @Controller()
 export class AppController {
   constructor(
-    private readonly appService: AppService,
     private userAuthService: UserAuthService,
     private adminAuthService: AdminAuthService,
   ) {}
-
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
-  }
 
   @UseGuards(UserLocalAuthGuard)
   @Post('auth/user')
