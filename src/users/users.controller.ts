@@ -137,6 +137,19 @@ export class UsersController {
     }
   }
 
+  @Get(':id/tickets')
+  @UseGuards(JwtAuthGuard)
+  async getUserTickets(@Param('id') id: number) {
+    try {
+      return await this.service.getUserTickets(id);
+    } catch (error) {
+      throw new HttpException(
+        `Error: ${error.message}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
   @Post(':id/buy')
   @UseGuards(JwtAuthGuard)
   async buyUserCart(

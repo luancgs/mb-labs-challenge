@@ -10,6 +10,7 @@ import { TicketDeleteError } from './errors/ticket.delete.error';
 import { TicketUpdateError } from './errors/ticket.update.error';
 import { Ticket } from './entities/ticket.entity';
 import { CartGetDto } from '../carts/DTOs/cart.get.dto';
+import { TicketGetDto } from './DTOs/ticket.get.dto';
 
 @Injectable()
 export class TicketsService {
@@ -30,8 +31,24 @@ export class TicketsService {
     try {
       return await this.ticketsRepository.find({
         where: [{ id: _id }],
-        loadRelationIds: true,
       });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async getTicketByUser(_id: number): Promise<TicketGetDto[]> {
+    try {
+      const tickets = await this.ticketsRepository.find({
+        where: [{ user: { id: _id } }],
+      });
+
+      const output: TicketGetDto[] = [];
+      for (const ticket of tickets) {
+        output.push(new TicketGetDto(ticket));
+      }
+
+      return output;
     } catch (error) {
       throw error;
     }
