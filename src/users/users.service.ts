@@ -167,7 +167,7 @@ export class UsersService {
     }
 
     try {
-      //await this.cartsService.deleteCartByUserId(userId);
+      await this.cartsService.deleteCartByUserId(userId);
     } catch (error) {
       throw new CartDeleteError(error.message);
     }
