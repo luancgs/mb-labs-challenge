@@ -26,10 +26,10 @@ export class EventsService {
   ) {}
 
   async getEvents(
-    title: string,
-    organizer: string,
-    address: string,
-    availableOnly: string,
+    title?: string,
+    organizer?: string,
+    address?: string,
+    availableOnly?: string,
   ): Promise<EventGetDto[]> {
     try {
       const queryOptions = this.buildFilterQuery(

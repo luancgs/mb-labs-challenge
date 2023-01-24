@@ -1,5 +1,6 @@
 import { AdminMock } from '../../admins/entities/admin.mock';
 import { OrganizerMock } from '../../organizers/entities/organizer.mock';
+import { EventGetDto } from '../DTOs/event.get.dto';
 import { Event } from './event.entity';
 
 export class EventMock extends Event {
@@ -16,5 +17,13 @@ export class EventMock extends Event {
     this.createdAt = new Date();
     this.organizer = new OrganizerMock(1);
     this.admin = new AdminMock(1);
+  }
+
+  controller(): EventGetDto {
+    return new EventGetDto(this);
+  }
+
+  service() {
+    return this;
   }
 }
