@@ -20,14 +20,21 @@ import { EventsService } from './events.service';
 import { EventCreateError } from './errors/event.create.error';
 import { EventDeleteError } from './errors/event.delete.error';
 import { EventUpdateError } from './errors/event.update.error';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-@Controller('events')
+@ApiBearerAuth()
 @ApiTags('events')
+@Controller('events')
 export class EventsController {
   constructor(private service: EventsService) {}
 
   @Get()
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Event })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Server Error',
+  })
   @UseGuards(JwtAuthGuard)
   async getAll(
     @Query('title') title?: string,
@@ -51,6 +58,12 @@ export class EventsController {
   }
 
   @Get(':id')
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Event })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Server Error',
+  })
   @UseGuards(JwtAuthGuard)
   async get(@Param('id') id: number) {
     try {
@@ -64,6 +77,16 @@ export class EventsController {
   }
 
   @Get(':id/discounts')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Success',
+    type: Discount,
+  })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Server Error',
+  })
   @UseGuards(JwtAuthGuard)
   async getEventDiscounts(@Param('id') id: number) {
     try {
@@ -77,6 +100,13 @@ export class EventsController {
   }
 
   @Post(':id/discounts')
+  @ApiResponse({ status: HttpStatus.CREATED, description: 'Success' })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Body Error' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Server Error',
+  })
   @UseGuards(AdminJwtAuthGuard)
   async createEventDiscount(
     @Param('id') id: number,
@@ -101,6 +131,13 @@ export class EventsController {
   }
 
   @Post()
+  @ApiResponse({ status: HttpStatus.CREATED, description: 'Success' })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Body Error' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Server Error',
+  })
   @UseGuards(AdminJwtAuthGuard)
   async create(@Body() event: Event) {
     try {
@@ -122,6 +159,13 @@ export class EventsController {
   }
 
   @Put(':id')
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success' })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Body Error' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Server Error',
+  })
   @UseGuards(AdminJwtAuthGuard)
   async update(@Param('id') id: number, @Body() event: Partial<Event>) {
     try {
@@ -143,6 +187,12 @@ export class EventsController {
   }
 
   @Delete(':id')
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
+    description: 'Invalid id',
+  })
   @UseGuards(AdminJwtAuthGuard)
   async delete(@Param('id') id: number) {
     try {

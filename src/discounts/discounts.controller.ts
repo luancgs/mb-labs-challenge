@@ -18,14 +18,25 @@ import { DiscountsService } from './discounts.service';
 import { DiscountCreateError } from './errors/discount.create.error';
 import { DiscountDeleteError } from './errors/discount.delete.error';
 import { DiscountUpdateError } from './errors/discount.update.error';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-@Controller('discounts')
+@ApiBearerAuth()
 @ApiTags('discounts')
+@Controller('discounts')
 export class DiscountsController {
   constructor(private service: DiscountsService) {}
 
   @Get()
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Success',
+    type: Discount,
+  })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Server Error',
+  })
   @UseGuards(JwtAuthGuard)
   async getAll(@Query('code') code?: string) {
     try {
@@ -39,6 +50,16 @@ export class DiscountsController {
   }
 
   @Get(':id')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Success',
+    type: Discount,
+  })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Server Error',
+  })
   @UseGuards(JwtAuthGuard)
   async getById(@Param('id') id: number) {
     try {
@@ -52,6 +73,13 @@ export class DiscountsController {
   }
 
   @Post()
+  @ApiResponse({ status: HttpStatus.CREATED, description: 'Success' })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Body Error' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Server Error',
+  })
   @UseGuards(AdminJwtAuthGuard)
   async create(@Body() discount: Discount) {
     try {
@@ -73,6 +101,13 @@ export class DiscountsController {
   }
 
   @Put(':id')
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success' })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Body Error' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Server Error',
+  })
   @UseGuards(AdminJwtAuthGuard)
   async update(@Param('id') id: number, @Body() discount: Partial<Discount>) {
     try {
@@ -94,6 +129,12 @@ export class DiscountsController {
   }
 
   @Delete(':id')
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
+    description: 'Invalid id',
+  })
   @UseGuards(AdminJwtAuthGuard)
   async delete(@Param('id') id: number) {
     try {

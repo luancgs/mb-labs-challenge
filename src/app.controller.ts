@@ -1,10 +1,17 @@
-import { Controller, Request, Post, UseGuards, Body } from '@nestjs/common';
+import {
+  Controller,
+  Request,
+  Post,
+  UseGuards,
+  Body,
+  HttpStatus,
+} from '@nestjs/common';
 import { UserLocalAuthGuard } from './auth/user/user.local.auth.guard';
 import { AdminLocalAuthGuard } from './auth/admin/admin.local.auth.guard';
 import { UserAuthService } from './auth/user/user.auth.service';
 import { AdminAuthService } from './auth/admin/admin.auth.service';
 import Stripe from 'stripe';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
 @Controller()
 export class AppController {
@@ -16,6 +23,11 @@ export class AppController {
   @UseGuards(UserLocalAuthGuard)
   @Post('auth/user')
   @ApiTags('login')
+  @ApiResponse({ status: HttpStatus.CREATED, description: 'Success' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Server Error',
+  })
   async loginUser(@Request() req) {
     return this.userAuthService.login(req.user);
   }
@@ -23,6 +35,11 @@ export class AppController {
   @UseGuards(AdminLocalAuthGuard)
   @Post('auth/admin')
   @ApiTags('login')
+  @ApiResponse({ status: HttpStatus.CREATED, description: 'Success' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Server Error',
+  })
   async loginAdmin(@Request() req) {
     return this.adminAuthService.login(req.user);
   }

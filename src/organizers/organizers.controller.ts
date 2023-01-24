@@ -18,14 +18,25 @@ import { OrganizersService } from './organizers.service';
 import { OrganizerCreateError } from './errors/organizer.create.error';
 import { OrganizerUpdateError } from './errors/organizer.update.error';
 import { OrganizerDeleteError } from './errors/organizer.delete.error';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-@Controller('organizers')
+@ApiBearerAuth()
 @ApiTags('organizers')
+@Controller('organizers')
 export class OrganizersController {
   constructor(private service: OrganizersService) {}
 
   @Get()
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Success',
+    type: Organizer,
+  })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Server Error',
+  })
   @UseGuards(JwtAuthGuard)
   async getAll(@Query('name') name?: string) {
     try {
@@ -39,6 +50,16 @@ export class OrganizersController {
   }
 
   @Get(':id')
+  @ApiResponse({
+    status: HttpStatus.OK,
+    description: 'Success',
+    type: Organizer,
+  })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Server Error',
+  })
   @UseGuards(JwtAuthGuard)
   async get(@Param('id') id: number) {
     try {
@@ -52,6 +73,13 @@ export class OrganizersController {
   }
 
   @Post()
+  @ApiResponse({ status: HttpStatus.CREATED, description: 'Success' })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Body Error' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Server Error',
+  })
   @UseGuards(AdminJwtAuthGuard)
   async create(@Body() organizer: Organizer) {
     try {
@@ -73,6 +101,13 @@ export class OrganizersController {
   }
 
   @Put(':id')
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success' })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Body Error' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Server Error',
+  })
   @UseGuards(AdminJwtAuthGuard)
   async update(@Param('id') id: number, @Body() organizer: Partial<Organizer>) {
     try {
@@ -94,6 +129,12 @@ export class OrganizersController {
   }
 
   @Delete(':id')
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
+    description: 'Invalid id',
+  })
   @UseGuards(AdminJwtAuthGuard)
   async delete(@Param('id') id: number) {
     try {

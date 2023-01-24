@@ -16,15 +16,22 @@ import { AdminsService } from './admins.service';
 import { AdminCreateError } from './errors/admin.create.error';
 import { AdminDeleteError } from './errors/admin.delete.error';
 import { AdminUpdateError } from './errors/admin.update.error';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-@Controller('admins')
+@ApiBearerAuth()
 @ApiTags('admins')
+@Controller('admins')
 @UseGuards(AdminJwtAuthGuard)
 export class AdminsController {
   constructor(private service: AdminsService) {}
 
   @Get()
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Admin })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Server Error',
+  })
   async getAll() {
     try {
       return await this.service.getAdmins();
@@ -37,6 +44,12 @@ export class AdminsController {
   }
 
   @Get(':id')
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Admin })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Server Error',
+  })
   async get(@Param('id') id: number) {
     try {
       return await this.service.getAdmin(id);
@@ -49,6 +62,13 @@ export class AdminsController {
   }
 
   @Post()
+  @ApiResponse({ status: HttpStatus.CREATED, description: 'Success' })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Body Error' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Server Error',
+  })
   async create(@Body() admin: Admin) {
     try {
       await this.service.createAdmin(admin);
@@ -69,6 +89,13 @@ export class AdminsController {
   }
 
   @Put(':id')
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success' })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Body Error' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Server Error',
+  })
   async update(@Param('id') id: number, @Body() admin: Partial<Admin>) {
     try {
       await this.service.updateAdmin(id, admin);
@@ -89,6 +116,12 @@ export class AdminsController {
   }
 
   @Delete(':id')
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
+    description: 'Invalid id',
+  })
   async delete(@Param('id') id: number) {
     try {
       await this.service.deleteAdmin(id);

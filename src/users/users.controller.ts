@@ -19,13 +19,21 @@ import { UserCreateError } from './errors/user.create.error';
 import { UserUpdateError } from './errors/user.update.error';
 import { UserDeleteError } from './errors/user.delete.error';
 import { Cart } from '../carts/entities/cart.entity';
-import { ApiTags } from '@nestjs/swagger';
+import { Ticket } from '../tickets/entities/ticket.entity';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-@Controller('users')
 @ApiTags('users')
+@Controller('users')
 export class UsersController {
   constructor(private service: UsersService) {}
   @Get()
+  @ApiBearerAuth()
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: User })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Server Error',
+  })
   @UseGuards(AdminJwtAuthGuard)
   async getAll() {
     try {
@@ -39,6 +47,13 @@ export class UsersController {
   }
 
   @Get(':id')
+  @ApiBearerAuth()
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: User })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Server Error',
+  })
   @UseGuards(JwtAuthGuard)
   async get(@Param('id') id: number) {
     try {
@@ -52,6 +67,13 @@ export class UsersController {
   }
 
   @Post()
+  @ApiResponse({ status: HttpStatus.CREATED, description: 'Success' })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Body Error' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Server Error',
+  })
   async create(@Body() user: User) {
     try {
       await this.service.createUser(user);
@@ -72,6 +94,14 @@ export class UsersController {
   }
 
   @Put(':id')
+  @ApiBearerAuth()
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success' })
+  @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Body Error' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Server Error',
+  })
   @UseGuards(JwtAuthGuard)
   async update(@Param('id') id: number, @Body() user: Partial<User>) {
     try {
@@ -93,6 +123,13 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.UNPROCESSABLE_ENTITY,
+    description: 'Invalid id',
+  })
   @UseGuards(JwtAuthGuard)
   async delete(@Param('id') id: number) {
     try {
@@ -114,6 +151,13 @@ export class UsersController {
   }
 
   @Get(':id/cart')
+  @ApiBearerAuth()
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Cart })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Server Error',
+  })
   @UseGuards(JwtAuthGuard)
   async getUserCart(@Param('id') id: number) {
     try {
@@ -127,6 +171,13 @@ export class UsersController {
   }
 
   @Post(':id/cart')
+  @ApiBearerAuth()
+  @ApiResponse({ status: HttpStatus.CREATED, description: 'Success' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Server Error',
+  })
   @UseGuards(JwtAuthGuard)
   async updateUserCart(@Body() cart: Partial<Cart>) {
     try {
@@ -140,6 +191,13 @@ export class UsersController {
   }
 
   @Get(':id/tickets')
+  @ApiBearerAuth()
+  @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Ticket })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Server Error',
+  })
   @UseGuards(JwtAuthGuard)
   async getUserTickets(@Param('id') id: number) {
     try {
@@ -153,6 +211,17 @@ export class UsersController {
   }
 
   @Post(':id/buy')
+  @ApiBearerAuth()
+  @ApiResponse({ status: HttpStatus.CREATED, description: 'Success' })
+  @ApiResponse({
+    status: HttpStatus.BAD_REQUEST,
+    description: 'Invalid payment method',
+  })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({
+    status: HttpStatus.INTERNAL_SERVER_ERROR,
+    description: 'Server Error',
+  })
   @UseGuards(JwtAuthGuard)
   async buyUserCart(
     @Param('id') id: number,
