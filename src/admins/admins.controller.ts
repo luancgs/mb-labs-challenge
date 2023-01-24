@@ -27,7 +27,7 @@ export class AdminsController {
 
   @Get()
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Admin })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Unauthorized' })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Server Error',
@@ -45,7 +45,7 @@ export class AdminsController {
 
   @Get(':id')
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Admin })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Unauthorized' })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Server Error',
@@ -64,7 +64,7 @@ export class AdminsController {
   @Post()
   @ApiResponse({ status: HttpStatus.CREATED, description: 'Success' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Body Error' })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Unauthorized' })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Server Error',
@@ -91,7 +91,7 @@ export class AdminsController {
   @Put(':id')
   @ApiResponse({ status: HttpStatus.OK, description: 'Success' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Body Error' })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Unauthorized' })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Server Error',
@@ -117,7 +117,7 @@ export class AdminsController {
 
   @Delete(':id')
   @ApiResponse({ status: HttpStatus.OK, description: 'Success' })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Unauthorized' })
   @ApiResponse({
     status: HttpStatus.UNPROCESSABLE_ENTITY,
     description: 'Invalid id',

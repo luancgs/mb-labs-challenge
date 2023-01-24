@@ -30,7 +30,7 @@ export class EventsController {
 
   @Get()
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Event })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Unauthorized' })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Server Error',
@@ -59,7 +59,7 @@ export class EventsController {
 
   @Get(':id')
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Event })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Unauthorized' })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Server Error',
@@ -82,7 +82,7 @@ export class EventsController {
     description: 'Success',
     type: Discount,
   })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Unauthorized' })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Server Error',
@@ -102,7 +102,7 @@ export class EventsController {
   @Post(':id/discounts')
   @ApiResponse({ status: HttpStatus.CREATED, description: 'Success' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Body Error' })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Unauthorized' })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Server Error',
@@ -133,7 +133,7 @@ export class EventsController {
   @Post()
   @ApiResponse({ status: HttpStatus.CREATED, description: 'Success' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Body Error' })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Unauthorized' })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Server Error',
@@ -161,7 +161,7 @@ export class EventsController {
   @Put(':id')
   @ApiResponse({ status: HttpStatus.OK, description: 'Success' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Body Error' })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Unauthorized' })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Server Error',
@@ -188,7 +188,7 @@ export class EventsController {
 
   @Delete(':id')
   @ApiResponse({ status: HttpStatus.OK, description: 'Success' })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Unauthorized' })
   @ApiResponse({
     status: HttpStatus.UNPROCESSABLE_ENTITY,
     description: 'Invalid id',

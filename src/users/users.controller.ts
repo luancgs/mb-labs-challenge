@@ -29,7 +29,7 @@ export class UsersController {
   @Get()
   @ApiBearerAuth()
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: User })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Unauthorized' })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Server Error',
@@ -49,7 +49,7 @@ export class UsersController {
   @Get(':id')
   @ApiBearerAuth()
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: User })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Unauthorized' })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Server Error',
@@ -69,7 +69,7 @@ export class UsersController {
   @Post()
   @ApiResponse({ status: HttpStatus.CREATED, description: 'Success' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Body Error' })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Unauthorized' })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Server Error',
@@ -97,7 +97,7 @@ export class UsersController {
   @ApiBearerAuth()
   @ApiResponse({ status: HttpStatus.OK, description: 'Success' })
   @ApiResponse({ status: HttpStatus.BAD_REQUEST, description: 'Body Error' })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Unauthorized' })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Server Error',
@@ -125,7 +125,7 @@ export class UsersController {
   @Delete(':id')
   @ApiBearerAuth()
   @ApiResponse({ status: HttpStatus.OK, description: 'Success' })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Unauthorized' })
   @ApiResponse({
     status: HttpStatus.UNPROCESSABLE_ENTITY,
     description: 'Invalid id',
@@ -153,7 +153,7 @@ export class UsersController {
   @Get(':id/cart')
   @ApiBearerAuth()
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Cart })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Unauthorized' })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Server Error',
@@ -173,7 +173,7 @@ export class UsersController {
   @Post(':id/cart')
   @ApiBearerAuth()
   @ApiResponse({ status: HttpStatus.CREATED, description: 'Success' })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Unauthorized' })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Server Error',
@@ -193,7 +193,7 @@ export class UsersController {
   @Get(':id/tickets')
   @ApiBearerAuth()
   @ApiResponse({ status: HttpStatus.OK, description: 'Success', type: Ticket })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Unauthorized' })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Server Error',
@@ -217,7 +217,7 @@ export class UsersController {
     status: HttpStatus.BAD_REQUEST,
     description: 'Invalid payment method',
   })
-  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Forbidden' })
+  @ApiResponse({ status: HttpStatus.UNAUTHORIZED, description: 'Unauthorized' })
   @ApiResponse({
     status: HttpStatus.INTERNAL_SERVER_ERROR,
     description: 'Server Error',
