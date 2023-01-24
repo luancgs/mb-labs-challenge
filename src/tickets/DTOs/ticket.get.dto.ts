@@ -1,5 +1,5 @@
-import { DiscountGetDto } from 'src/discounts/DTOs/discount.get.dto';
-import { EventGetDto } from 'src/events/DTOs/event.get.dto';
+import { DiscountGetDto } from '../../discounts/DTOs/discount.get.dto';
+import { EventGetDto } from '../../events/DTOs/event.get.dto';
 import { Ticket } from '../entities/ticket.entity';
 
 export class TicketGetDto {
