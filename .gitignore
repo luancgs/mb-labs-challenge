@@ -35,8 +35,7 @@ lerna-debug.log*
 !.vscode/extensions.json
 
 # Development volumes
-/database
-/workbench
+/database/data
 
 # Environment variables
 .env
