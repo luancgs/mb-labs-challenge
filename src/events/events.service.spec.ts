@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { DiscountsService } from '../discounts/discounts.service';
-import { DataSource, QueryFailedError, Repository } from 'typeorm';
+import { QueryFailedError, Repository } from 'typeorm';
 import { EventGetDto } from './DTOs/event.get.dto';
 import { Event } from './entities/event.entity';
 import { EventMock } from './entities/event.mock';
