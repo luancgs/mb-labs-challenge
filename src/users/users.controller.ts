@@ -19,8 +19,10 @@ import { UserCreateError } from './errors/user.create.error';
 import { UserUpdateError } from './errors/user.update.error';
 import { UserDeleteError } from './errors/user.delete.error';
 import { Cart } from '../carts/entities/cart.entity';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('users')
+@ApiTags('users')
 export class UsersController {
   constructor(private service: UsersService) {}
   @Get()

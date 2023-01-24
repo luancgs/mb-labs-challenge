@@ -18,8 +18,10 @@ import { OrganizersService } from './organizers.service';
 import { OrganizerCreateError } from './errors/organizer.create.error';
 import { OrganizerUpdateError } from './errors/organizer.update.error';
 import { OrganizerDeleteError } from './errors/organizer.delete.error';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('organizers')
+@ApiTags('organizers')
 export class OrganizersController {
   constructor(private service: OrganizersService) {}
 

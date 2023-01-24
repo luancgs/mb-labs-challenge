@@ -16,8 +16,10 @@ import { AdminsService } from './admins.service';
 import { AdminCreateError } from './errors/admin.create.error';
 import { AdminDeleteError } from './errors/admin.delete.error';
 import { AdminUpdateError } from './errors/admin.update.error';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('admins')
+@ApiTags('admins')
 @UseGuards(AdminJwtAuthGuard)
 export class AdminsController {
   constructor(private service: AdminsService) {}

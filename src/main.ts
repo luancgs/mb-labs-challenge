@@ -11,7 +11,6 @@ async function bootstrap() {
       'An API for an Event Manager app, with search and payment functionalites',
     )
     .setVersion('1.0')
-    .addTag('test')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document);

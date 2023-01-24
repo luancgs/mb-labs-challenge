@@ -20,8 +20,10 @@ import { EventsService } from './events.service';
 import { EventCreateError } from './errors/event.create.error';
 import { EventDeleteError } from './errors/event.delete.error';
 import { EventUpdateError } from './errors/event.update.error';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('events')
+@ApiTags('events')
 export class EventsController {
   constructor(private service: EventsService) {}
 

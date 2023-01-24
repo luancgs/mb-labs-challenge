@@ -18,8 +18,10 @@ import { DiscountsService } from './discounts.service';
 import { DiscountCreateError } from './errors/discount.create.error';
 import { DiscountDeleteError } from './errors/discount.delete.error';
 import { DiscountUpdateError } from './errors/discount.update.error';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('discounts')
+@ApiTags('discounts')
 export class DiscountsController {
   constructor(private service: DiscountsService) {}
 

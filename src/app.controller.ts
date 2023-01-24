@@ -4,6 +4,7 @@ import { AdminLocalAuthGuard } from './auth/admin/admin.local.auth.guard';
 import { UserAuthService } from './auth/user/user.auth.service';
 import { AdminAuthService } from './auth/admin/admin.auth.service';
 import Stripe from 'stripe';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller()
 export class AppController {
@@ -14,17 +15,20 @@ export class AppController {
 
   @UseGuards(UserLocalAuthGuard)
   @Post('auth/user')
+  @ApiTags('login')
   async loginUser(@Request() req) {
     return this.userAuthService.login(req.user);
   }
 
   @UseGuards(AdminLocalAuthGuard)
   @Post('auth/admin')
+  @ApiTags('login')
   async loginAdmin(@Request() req) {
     return this.adminAuthService.login(req.user);
   }
 
   @Post('/payment-webhook')
+  @ApiTags('payment')
   async paymentWebhook(@Body() stripeEvent: Stripe.Event) {
     switch (stripeEvent.type) {
       case 'payment_intent.succeeded':
