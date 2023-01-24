@@ -1,0 +1,11 @@
+# Docker specific files
+docker-compose.*
+Dockerfile
+
+# compiled output
+/dist
+/node_modules
+
+# Development volumes
+/database
+/workbench
